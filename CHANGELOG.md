@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/timoa/github-actions-gui/compare/v1.0.0...v1.0.1) (2026-02-03)
+
+
+### Bug Fixes
+
+* **trigger:** update the UI of Job & Trigger nodes ([f138732](https://github.com/timoa/github-actions-gui/commit/f138732a58be35464c989dbd826ab062e404301c))
+
 # 1.0.0 (2026-02-03)
 
 
