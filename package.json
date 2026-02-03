@@ -9,6 +9,9 @@
     "type": "git",
     "url": "https://github.com/timoa/github-actions-gui.git"
   },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

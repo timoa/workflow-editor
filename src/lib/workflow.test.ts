@@ -41,7 +41,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
       - name: Build
         run: pnpm build
 `
@@ -73,7 +73,7 @@ describe('parseWorkflow', () => {
     expect(steps[0].uses).toBe('actions/checkout@v4')
     expect(steps[1].name).toBe('Setup Node')
     expect(steps[1].uses).toBe('actions/setup-node@v4')
-    expect(steps[1].with).toEqual({ 'node-version': 22 })
+    expect(steps[1].with).toEqual({ 'node-version': 24 })
     expect(steps[2].run).toBe('pnpm build')
   })
 
@@ -121,7 +121,7 @@ describe('serializeWorkflow', () => {
     const yaml = serializeWorkflow(workflow)
     const { workflow: again, errors } = parseWorkflow(yaml)
     expect(errors).toEqual([])
-    expect(again.jobs.deploy.steps[1].with).toEqual({ 'node-version': 22 })
+    expect(again.jobs.deploy.steps[1].with).toEqual({ 'node-version': 24 })
     expect(again.jobs.deploy.steps[2].run).toBe('pnpm build')
   })
 })
