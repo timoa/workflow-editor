@@ -18,6 +18,39 @@ export interface ParsedTrigger {
 }
 
 /**
+ * Triggers that support the optional `types` field
+ * Reference: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
+ */
+export const TRIGGERS_WITH_TYPES = new Set([
+  'branch_protection_rule',
+  'check_run',
+  'check_suite',
+  'discussion',
+  'discussion_comment',
+  'issue_comment',
+  'issues',
+  'label',
+  'merge_group',
+  'milestone',
+  'pull_request',
+  'pull_request_review',
+  'pull_request_review_comment',
+  'pull_request_target',
+  'registry_package',
+  'release',
+  'repository_dispatch',
+  'watch',
+  'workflow_run',
+])
+
+/**
+ * Check if a trigger event supports the `types` field
+ */
+export function triggerSupportsTypes(event: string): boolean {
+  return TRIGGERS_WITH_TYPES.has(event)
+}
+
+/**
  * Parse the workflow `on` field into an array of trigger configurations
  */
 export function parseTriggers(on: Workflow['on']): ParsedTrigger[] {

@@ -32,6 +32,7 @@ interface JobPropertyPanelProps {
   jobId: string
   onWorkflowChange: (workflow: Workflow) => void
   onClose: () => void
+  onDeleteJob?: (jobId: string) => void
 }
 
 export function JobPropertyPanel({
@@ -39,6 +40,7 @@ export function JobPropertyPanel({
   jobId,
   onWorkflowChange,
   onClose,
+  onDeleteJob,
 }: JobPropertyPanelProps) {
   const job = workflow.jobs[jobId]
   if (!job) return null
@@ -838,6 +840,18 @@ export function JobPropertyPanel({
           </ul>
         </div>
       </div>
+      {onDeleteJob && (
+        <div className="flex justify-center border-t border-slate-200 p-4">
+          <button
+            type="button"
+            onClick={() => onDeleteJob(jobId)}
+            className="rounded border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+            aria-label={`Delete job ${jobId}`}
+          >
+            Delete job
+          </button>
+        </div>
+      )}
     </aside>
   )
 }

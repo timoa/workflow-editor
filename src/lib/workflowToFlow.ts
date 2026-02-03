@@ -23,19 +23,23 @@ export type TriggerNodeData = {
   triggers: ParsedTrigger[]
 }
 
+export type AddJobNodeData = {
+  needs: string[]
+}
+
 /**
  * Build React Flow nodes and edges from workflow model.
  * Layout: trigger node first, then jobs flow left-to-right by dependency level (column 0 = no deps, column 1 = needs column 0, etc.);
  * within each column nodes are stacked vertically.
  */
 export function workflowToFlowNodesEdges(workflow: Workflow): {
-  nodes: Node<JobNodeData | TriggerNodeData>[]
+  nodes: Node<JobNodeData | TriggerNodeData | AddJobNodeData>[]
   edges: Edge[]
 } {
   const jobIds = Object.keys(workflow.jobs)
   const triggers = parseTriggers(workflow.on)
   
-  const nodes: Node<JobNodeData | TriggerNodeData>[] = []
+  const nodes: Node<JobNodeData | TriggerNodeData | AddJobNodeData>[] = []
   const edges: Edge[] = []
 
   // One trigger node per trigger (or a single empty node if no triggers)
@@ -165,6 +169,33 @@ export function workflowToFlowNodesEdges(workflow: Workflow): {
           target: jobId,
         })
       }
+    }
+  }
+
+  // Add "+" node at the end to create new jobs from the diagram
+  const lastColumn = columns[columns.length - 1]
+  if (lastColumn && lastColumn.length > 0) {
+    const lastColX = jobStartX + (columns.length - 1) * (NODE_WIDTH + HORIZONTAL_GAP)
+    const addJobX = lastColX + NODE_WIDTH + HORIZONTAL_GAP
+    const lastColumnHeight = lastColumn.length
+    const ADD_JOB_NODE_HEIGHT = 40 // h-10 = 40px
+    const addJobY =
+      lastColumnHeight > 0
+        ? (lastColumnHeight - 1) * (NODE_HEIGHT + VERTICAL_GAP) / 2 - ADD_JOB_NODE_HEIGHT / 2
+        : 0
+    const addJobNode: Node<AddJobNodeData> = {
+      id: '__add_job__',
+      type: 'addJob',
+      position: { x: addJobX, y: addJobY },
+      data: { needs: lastColumn },
+    }
+    nodes.push(addJobNode)
+    for (const jobId of lastColumn) {
+      edges.push({
+        id: `${jobId}-__add_job__`,
+        source: jobId,
+        target: '__add_job__',
+      })
     }
   }
 

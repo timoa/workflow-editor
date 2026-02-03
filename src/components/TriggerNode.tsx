@@ -20,7 +20,7 @@ function TriggerNodeComponent(props: NodeProps) {
     >
       <div className="flex items-center gap-2 mb-2">
         <div className="flex-shrink-0 w-2 h-2 rounded-full bg-purple-500"></div>
-        <div className="text-xs font-semibold text-purple-700 uppercase tracking-wide">Workflow Trigger</div>
+        <div className="text-xs font-semibold text-purple-700 uppercase tracking-wide">Trigger</div>
       </div>
       <div className="space-y-1.5">
         {d.triggers.length === 0 ? (

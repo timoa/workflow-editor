@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import type { Workflow } from '@/types/workflow'
 import type { ParsedTrigger, TriggerConfig } from '@/lib/triggerUtils'
-import { parseTriggers, triggersToOn } from '@/lib/triggerUtils'
+import { parseTriggers, triggersToOn, triggerSupportsTypes } from '@/lib/triggerUtils'
 
 interface TriggerPropertyPanelProps {
   workflow: Workflow
@@ -12,6 +12,9 @@ interface TriggerPropertyPanelProps {
 const TRIGGER_TYPES = [
   { value: 'push', label: 'Push' },
   { value: 'pull_request', label: 'Pull Request' },
+  { value: 'pull_request_target', label: 'Pull Request Target' },
+  { value: 'pull_request_review', label: 'Pull Request Review' },
+  { value: 'pull_request_review_comment', label: 'Pull Request Review Comment' },
   { value: 'workflow_dispatch', label: 'Workflow Dispatch' },
   { value: 'repository_dispatch', label: 'Repository Dispatch' },
   { value: 'schedule', label: 'Schedule (Cron)' },
@@ -33,6 +36,13 @@ const TRIGGER_TYPES = [
   { value: 'page_build', label: 'Page Build' },
   { value: 'public', label: 'Public' },
   { value: 'status', label: 'Status' },
+  { value: 'branch_protection_rule', label: 'Branch Protection Rule' },
+  { value: 'check_run', label: 'Check Run' },
+  { value: 'check_suite', label: 'Check Suite' },
+  { value: 'discussion', label: 'Discussion' },
+  { value: 'discussion_comment', label: 'Discussion Comment' },
+  { value: 'merge_group', label: 'Merge Group' },
+  { value: 'registry_package', label: 'Registry Package' },
 ]
 
 export function TriggerPropertyPanel({
@@ -247,12 +257,22 @@ export function TriggerPropertyPanel({
                     </div>
                   )}
 
-                  {/* Types (for pull_request, workflow_run, etc.) */}
-                  {(trigger.event === 'pull_request' || trigger.event === 'workflow_run') && (
+                  {/* Types (for triggers that support activity types) */}
+                  {triggerSupportsTypes(trigger.event) && (
                     <div>
-                      <label className="block text-xs font-medium text-slate-500 mb-1">
-                        Types {trigger.event === 'pull_request' && '(opened, synchronize, etc.)'}
-                      </label>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">Types (optional)</label>
+                      {trigger.event === 'repository_dispatch' && (
+                        <p className="text-xs text-slate-500 mb-1">Filter by custom event type sent via API</p>
+                      )}
+                      {trigger.event === 'release' && (
+                        <p className="text-xs text-slate-500 mb-1">e.g. published, unpublished, created, prereleased, released</p>
+                      )}
+                      {trigger.event === 'pull_request' && (
+                        <p className="text-xs text-slate-500 mb-1">e.g. opened, synchronize, closed, labeled, etc.</p>
+                      )}
+                      {trigger.event === 'workflow_run' && (
+                        <p className="text-xs text-slate-500 mb-1">e.g. completed, requested, in_progress</p>
+                      )}
                       <div className="space-y-1.5">
                         {(trigger.config.types ?? []).map((type, typeIdx) => (
                           <div key={typeIdx} className="flex items-center gap-2">
@@ -265,7 +285,13 @@ export function TriggerPropertyPanel({
                                 updateTriggerConfig(index, 'types', types)
                               }}
                               className="flex-1 rounded border border-slate-300 px-2 py-1 text-sm"
-                              placeholder="opened"
+                              placeholder={
+                                trigger.event === 'release' ? 'published' :
+                                trigger.event === 'repository_dispatch' ? 'deploy' :
+                                trigger.event === 'pull_request' ? 'opened' :
+                                trigger.event === 'workflow_run' ? 'completed' :
+                                'activity_type'
+                              }
                             />
                             <button
                               type="button"
@@ -381,49 +407,6 @@ export function TriggerPropertyPanel({
                     </div>
                   )}
 
-                  {/* Repository Dispatch Types */}
-                  {trigger.event === 'repository_dispatch' && (
-                    <div>
-                      <label className="block text-xs font-medium text-slate-500 mb-1">Types</label>
-                      <div className="space-y-1.5">
-                        {(trigger.config.types ?? []).map((type, typeIdx) => (
-                          <div key={typeIdx} className="flex items-center gap-2">
-                            <input
-                              type="text"
-                              value={type}
-                              onChange={(e) => {
-                                const types = [...(trigger.config.types ?? [])]
-                                types[typeIdx] = e.target.value
-                                updateTriggerConfig(index, 'types', types)
-                              }}
-                              className="flex-1 rounded border border-slate-300 px-2 py-1 text-sm"
-                              placeholder="deploy"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeArrayItem(index, 'types', typeIdx)}
-                              className="rounded p-1 text-slate-400 hover:bg-slate-200 hover:text-slate-600"
-                            >
-                              ×
-                            </button>
-                          </div>
-                        ))}
-                        <input
-                          type="text"
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault()
-                              const input = e.currentTarget
-                              addArrayItem(index, 'types', input.value)
-                              input.value = ''
-                            }
-                          }}
-                          className="w-full rounded border border-slate-300 px-2 py-1 text-sm"
-                          placeholder="Press Enter to add type"
-                        />
-                      </div>
-                    </div>
-                  )}
 
                   {/* Schedule Cron */}
                   {trigger.event === 'schedule' && (

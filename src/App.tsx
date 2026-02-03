@@ -5,9 +5,11 @@ import {
   Controls,
   MiniMap,
   ReactFlowProvider,
+  type Node,
   type OnSelectionChangeFunc,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
+import { AddJobNode } from '@/components/AddJobNode'
 import { JobNode } from '@/components/JobNode'
 import { JobPropertyPanel } from '@/components/JobPropertyPanel'
 import { TriggerNode } from '@/components/TriggerNode'
@@ -19,10 +21,17 @@ import { openWorkflowFromYaml, saveWorkflowToFile } from '@/lib/fileHandling'
 import { serializeWorkflow } from '@/lib/serializeWorkflow'
 import { parseTriggers, triggersToOn } from '@/lib/triggerUtils'
 import { lintWorkflow, type LintError } from '@/lib/workflowLinter'
-import { workflowToFlowNodesEdges } from '@/lib/workflowToFlow'
+import {
+  workflowToFlowNodesEdges,
+  type AddJobNodeData,
+  type JobNodeData,
+  type TriggerNodeData,
+} from '@/lib/workflowToFlow'
 import type { Workflow } from '@/types/workflow'
 
-const nodeTypes = { job: JobNode, trigger: TriggerNode }
+type FlowNode = Node<JobNodeData | TriggerNodeData | AddJobNodeData>
+
+const nodeTypes = { job: JobNode, trigger: TriggerNode, addJob: AddJobNode }
 
 const sampleWorkflow: Workflow = {
   name: 'Sample',
@@ -67,11 +76,50 @@ function AppInner() {
     }
   }, [workflow])
 
+  const handleRequestDeleteJob = useCallback(
+    (jobId: string) => {
+      if (!workflow?.jobs[jobId]) return
+      const jobName = workflow.jobs[jobId].name || jobId
+      const message = `Are you sure you want to delete the job "${jobName}"? This cannot be undone.`
+      if (!window.confirm(message)) return
+      const nextJobs = { ...workflow.jobs }
+      delete nextJobs[jobId]
+      for (const id of Object.keys(nextJobs)) {
+        const job = nextJobs[id]
+        if (job.needs) {
+          const needs = Array.isArray(job.needs) ? job.needs : [job.needs]
+          const filtered = needs.filter((n) => n !== jobId)
+          if (filtered.length !== needs.length) {
+            nextJobs[id] = {
+              ...job,
+              needs: filtered.length === 0 ? undefined : filtered.length === 1 ? filtered[0] : filtered,
+            }
+          }
+        }
+      }
+      isUpdatingWorkflowRef.current = true
+      setWorkflow({ ...workflow, jobs: nextJobs })
+      setSelectedJobId(null)
+      setTimeout(() => {
+        isUpdatingWorkflowRef.current = false
+      }, 100)
+    },
+    [workflow]
+  )
+
   const nodes = useMemo(() => {
-    return baseNodes.map((node) => ({
-      ...node,
-      selected: node.id.startsWith('__trigger__') ? selectedTrigger : selectedJobId === node.id,
-    }))
+    return baseNodes.map((node) => {
+      const selected =
+        node.id === '__add_job__'
+          ? false
+          : node.id.startsWith('__trigger__')
+            ? selectedTrigger
+            : selectedJobId === node.id
+      if (node.type === 'job' && node.data && 'jobId' in node.data) {
+        return { ...node, selected }
+      }
+      return { ...node, selected }
+    })
   }, [baseNodes, selectedJobId, selectedTrigger])
 
   // Preserve selection when workflow updates
@@ -85,6 +133,12 @@ function AppInner() {
   const onSelectionChange: OnSelectionChangeFunc = useCallback(({ nodes: selectedNodes }) => {
     // Ignore selection changes during workflow updates
     if (isUpdatingWorkflowRef.current) {
+      return
+    }
+    const addJobNode = selectedNodes.find((n) => n.id === '__add_job__')
+    if (addJobNode) {
+      setSelectedJobId(null)
+      setSelectedTrigger(false)
       return
     }
     const triggerNode = selectedNodes.find((n) => n.type === 'trigger')
@@ -190,44 +244,62 @@ function AppInner() {
     }, 100)
   }, [workflow])
 
-  const handleAddJob = useCallback(() => {
-    if (!workflow) {
-      // Create a new workflow if none exists
-      const newWorkflow: Workflow = {
-        name: 'Untitled Workflow',
-        on: { push: { branches: ['main'] } },
-        jobs: {},
+  const handleAddJob = useCallback(
+    (needs?: string[]) => {
+      if (!workflow) {
+        // Create a new workflow if none exists
+        const newWorkflow: Workflow = {
+          name: 'Untitled Workflow',
+          on: { push: { branches: ['main'] } },
+          jobs: {},
+        }
+        const jobId = generateUniqueJobId([])
+        newWorkflow.jobs[jobId] = {
+          'runs-on': 'ubuntu-latest',
+          steps: [{ run: 'echo "Hello, World!"' }],
+        }
+        setWorkflow(newWorkflow)
+        setSelectedJobId(jobId)
+        return
       }
-      const jobId = generateUniqueJobId([])
-      newWorkflow.jobs[jobId] = {
+
+      const existingIds = Object.keys(workflow.jobs)
+      const jobId = generateUniqueJobId(existingIds)
+      const newJob: Workflow['jobs'][string] = {
         'runs-on': 'ubuntu-latest',
         steps: [{ run: 'echo "Hello, World!"' }],
       }
-      setWorkflow(newWorkflow)
+      if (needs && needs.length > 0) {
+        newJob.needs = needs.length === 1 ? needs[0] : needs
+      }
+
+      isUpdatingWorkflowRef.current = true
+      setWorkflow({
+        ...workflow,
+        jobs: {
+          ...workflow.jobs,
+          [jobId]: newJob,
+        },
+      })
       setSelectedJobId(jobId)
-      return
-    }
+      setTimeout(() => {
+        isUpdatingWorkflowRef.current = false
+      }, 100)
+    },
+    [workflow, generateUniqueJobId]
+  )
 
-    const existingIds = Object.keys(workflow.jobs)
-    const jobId = generateUniqueJobId(existingIds)
-    const newJob = {
-      'runs-on': 'ubuntu-latest',
-      steps: [{ run: 'echo "Hello, World!"' }],
-    }
-
-    isUpdatingWorkflowRef.current = true
-    setWorkflow({
-      ...workflow,
-      jobs: {
-        ...workflow.jobs,
-        [jobId]: newJob,
-      },
-    })
-    setSelectedJobId(jobId)
-    setTimeout(() => {
-      isUpdatingWorkflowRef.current = false
-    }, 100)
-  }, [workflow, generateUniqueJobId])
+  const onNodeClick = useCallback(
+    (_: React.MouseEvent, node: FlowNode) => {
+      if (node.id === '__add_job__') {
+        const data = node.data as AddJobNodeData
+        if (data?.needs?.length) {
+          handleAddJob(data.needs)
+        }
+      }
+    },
+    [handleAddJob]
+  )
 
   const hasJobs = nodes.some((n) => n.type === 'job')
 
@@ -297,13 +369,9 @@ function AppInner() {
         <div className="flex items-center gap-2">
           <h1 className="text-lg font-semibold text-slate-800">GitHub Actions GUI</h1>
           {workflow && (
-            <button
-              type="button"
-              onClick={() => setShowWorkflowProperties(true)}
-              className="text-sm text-slate-500 hover:text-slate-700 hover:underline"
-            >
+            <span className="text-sm text-slate-500">
               {workflow.name || 'Untitled Workflow'}
-            </button>
+            </span>
           )}
         </div>
         <div className="h-6 w-px bg-slate-200" aria-hidden />
@@ -350,6 +418,19 @@ function AppInner() {
         <div className="flex items-center gap-2" role="group" aria-label="Editor">
           <button
             type="button"
+            onClick={() => setShowWorkflowProperties(true)}
+            disabled={!workflow}
+            className={`rounded border px-2 py-1 text-sm font-medium disabled:opacity-50 ${
+              showWorkflowProperties
+                ? 'border-slate-500 bg-slate-100 text-slate-800 ring-1 ring-slate-300'
+                : 'border-slate-400 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:border-slate-500'
+            }`}
+            title="Edit workflow name, run name, and environment variables"
+          >
+            Workflow config
+          </button>
+          <button
+            type="button"
             onClick={handleAddTrigger}
             className="rounded border border-purple-300 bg-purple-50 px-2 py-1 text-sm font-medium text-purple-700 hover:bg-purple-100"
           >
@@ -357,7 +438,7 @@ function AppInner() {
           </button>
           <button
             type="button"
-            onClick={handleAddJob}
+            onClick={() => handleAddJob()}
             className="rounded border border-blue-300 bg-blue-50 px-2 py-1 text-sm font-medium text-blue-700 hover:bg-blue-100"
           >
             + Add Job
@@ -416,6 +497,7 @@ function AppInner() {
               nodes={nodes}
               edges={edges}
               onSelectionChange={onSelectionChange}
+              onNodeClick={onNodeClick}
               nodeTypes={nodeTypes}
               fitView
               className="bg-slate-50"
@@ -429,7 +511,7 @@ function AppInner() {
               <p className="text-slate-500">No jobs in workflow.</p>
               <button
                 type="button"
-                onClick={handleAddJob}
+                onClick={() => handleAddJob()}
                 className="rounded border border-blue-300 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100"
               >
                 + Add Your First Job
@@ -478,6 +560,7 @@ function AppInner() {
               }, 100)
             }}
             onClose={() => setSelectedJobId(null)}
+            onDeleteJob={handleRequestDeleteJob}
           />
         )}
       </main>

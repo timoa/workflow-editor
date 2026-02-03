@@ -52,8 +52,9 @@ export function WorkflowPropertyPanel({
 
   return (
     <aside className="flex w-96 shrink-0 flex-col border-l border-slate-200 bg-white shadow-sm">
-      <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2">
-        <h2 className="text-sm font-semibold text-slate-800">Workflow Properties</h2>
+      <div className="flex flex-col border-b border-slate-200 px-4 py-2">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-slate-800">Workflow config</h2>
         <button
           type="button"
           onClick={onClose}
@@ -62,6 +63,8 @@ export function WorkflowPropertyPanel({
         >
           <span className="text-lg leading-none">×</span>
         </button>
+        </div>
+        <p className="text-xs text-slate-500 mt-0.5">Name, run name, and environment variables</p>
       </div>
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         <div>

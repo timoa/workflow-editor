@@ -43,6 +43,16 @@ const VALID_TRIGGER_EVENTS = new Set([
   'release',
   'status',
   'watch',
+  'branch_protection_rule',
+  'check_run',
+  'check_suite',
+  'discussion',
+  'discussion_comment',
+  'merge_group',
+  'pull_request_review',
+  'pull_request_review_comment',
+  'pull_request_target',
+  'registry_package',
 ])
 
 /**
@@ -71,7 +81,177 @@ const VALID_PULL_REQUEST_TYPES = new Set([
 /**
  * Valid workflow_run activity types
  */
-const VALID_WORKFLOW_RUN_ACTIVITIES = new Set(['completed', 'requested'])
+const VALID_WORKFLOW_RUN_ACTIVITIES = new Set(['completed', 'requested', 'in_progress'])
+
+/**
+ * Valid release activity types
+ * https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#release
+ */
+const VALID_RELEASE_TYPES = new Set([
+  'published',
+  'unpublished',
+  'created',
+  'edited',
+  'deleted',
+  'prereleased',
+  'released',
+])
+
+/**
+ * Valid branch_protection_rule activity types
+ */
+const VALID_BRANCH_PROTECTION_RULE_TYPES = new Set(['created', 'edited', 'deleted'])
+
+/**
+ * Valid check_run activity types
+ */
+const VALID_CHECK_RUN_TYPES = new Set(['created', 'rerequested', 'completed', 'requested_action'])
+
+/**
+ * Valid check_suite activity types
+ */
+const VALID_CHECK_SUITE_TYPES = new Set(['completed'])
+
+/**
+ * Valid discussion activity types
+ */
+const VALID_DISCUSSION_TYPES = new Set([
+  'created',
+  'edited',
+  'deleted',
+  'transferred',
+  'pinned',
+  'unpinned',
+  'labeled',
+  'unlabeled',
+  'locked',
+  'unlocked',
+  'category_changed',
+  'answered',
+  'unanswered',
+])
+
+/**
+ * Valid discussion_comment activity types
+ */
+const VALID_DISCUSSION_COMMENT_TYPES = new Set(['created', 'edited', 'deleted'])
+
+/**
+ * Valid issue_comment activity types
+ */
+const VALID_ISSUE_COMMENT_TYPES = new Set(['created', 'edited', 'deleted'])
+
+/**
+ * Valid issues activity types
+ */
+const VALID_ISSUES_TYPES = new Set([
+  'opened',
+  'edited',
+  'deleted',
+  'transferred',
+  'pinned',
+  'unpinned',
+  'closed',
+  'reopened',
+  'assigned',
+  'unassigned',
+  'labeled',
+  'unlabeled',
+  'locked',
+  'unlocked',
+  'milestoned',
+  'demilestoned',
+  'typed',
+  'untyped',
+])
+
+/**
+ * Valid label activity types
+ */
+const VALID_LABEL_TYPES = new Set(['created', 'edited', 'deleted'])
+
+/**
+ * Valid merge_group activity types
+ */
+const VALID_MERGE_GROUP_TYPES = new Set(['checks_requested'])
+
+/**
+ * Valid milestone activity types
+ */
+const VALID_MILESTONE_TYPES = new Set(['created', 'closed', 'opened', 'edited', 'deleted'])
+
+/**
+ * Valid pull_request_review activity types
+ */
+const VALID_PULL_REQUEST_REVIEW_TYPES = new Set(['submitted', 'edited', 'dismissed'])
+
+/**
+ * Valid pull_request_review_comment activity types
+ */
+const VALID_PULL_REQUEST_REVIEW_COMMENT_TYPES = new Set(['created', 'edited', 'deleted'])
+
+/**
+ * Valid pull_request_target activity types (same as pull_request)
+ */
+const VALID_PULL_REQUEST_TARGET_TYPES = VALID_PULL_REQUEST_TYPES
+
+/**
+ * Valid registry_package activity types
+ */
+const VALID_REGISTRY_PACKAGE_TYPES = new Set(['published', 'updated'])
+
+/**
+ * Valid watch activity types
+ */
+const VALID_WATCH_TYPES = new Set(['started'])
+
+/**
+ * Get valid types for a trigger event
+ */
+function getValidTypesForTrigger(event: string): Set<string> | null {
+  switch (event) {
+    case 'branch_protection_rule':
+      return VALID_BRANCH_PROTECTION_RULE_TYPES
+    case 'check_run':
+      return VALID_CHECK_RUN_TYPES
+    case 'check_suite':
+      return VALID_CHECK_SUITE_TYPES
+    case 'discussion':
+      return VALID_DISCUSSION_TYPES
+    case 'discussion_comment':
+      return VALID_DISCUSSION_COMMENT_TYPES
+    case 'issue_comment':
+      return VALID_ISSUE_COMMENT_TYPES
+    case 'issues':
+      return VALID_ISSUES_TYPES
+    case 'label':
+      return VALID_LABEL_TYPES
+    case 'merge_group':
+      return VALID_MERGE_GROUP_TYPES
+    case 'milestone':
+      return VALID_MILESTONE_TYPES
+    case 'pull_request':
+      return VALID_PULL_REQUEST_TYPES
+    case 'pull_request_review':
+      return VALID_PULL_REQUEST_REVIEW_TYPES
+    case 'pull_request_review_comment':
+      return VALID_PULL_REQUEST_REVIEW_COMMENT_TYPES
+    case 'pull_request_target':
+      return VALID_PULL_REQUEST_TARGET_TYPES
+    case 'registry_package':
+      return VALID_REGISTRY_PACKAGE_TYPES
+    case 'release':
+      return VALID_RELEASE_TYPES
+    case 'repository_dispatch':
+      return null // Custom types, no validation
+    case 'watch':
+      return VALID_WATCH_TYPES
+    case 'workflow_run':
+      return VALID_WORKFLOW_RUN_ACTIVITIES
+    default:
+      return null
+  }
+}
 
 /**
  * Valid runner labels
@@ -164,34 +344,40 @@ function validateTrigger(trigger: ParsedTrigger, index: number): LintError[] {
     }
   }
 
-  // Validate pull_request types
-  if (trigger.event === 'pull_request' && config.types) {
+  // Validate types for all triggers that support them
+  if (config.types) {
     const types = Array.isArray(config.types) ? config.types : [config.types]
-    for (const type of types) {
-      if (typeof type === 'string' && !VALID_PULL_REQUEST_TYPES.has(type)) {
-        errors.push({
-          message: `Invalid pull_request type: "${type}". Valid types: ${Array.from(VALID_PULL_REQUEST_TYPES).slice(0, 10).join(', ')}, ...`,
-          path: `${path}.${trigger.event}.types`,
-          severity: 'warning',
-        })
-      }
-    }
-  }
-
-  // Validate workflow_run
-  if (trigger.event === 'workflow_run') {
-    if (config.types) {
-      const types = Array.isArray(config.types) ? config.types : [config.types]
-      for (const type of types) {
-        if (typeof type === 'string' && !VALID_WORKFLOW_RUN_ACTIVITIES.has(type)) {
+    const validTypes = getValidTypesForTrigger(trigger.event)
+    
+    if (validTypes === null) {
+      // Custom types (e.g., repository_dispatch) - just validate they're strings
+      if (trigger.event === 'repository_dispatch') {
+        if (!types.every((t) => typeof t === 'string')) {
           errors.push({
-            message: `Invalid workflow_run activity type: "${type}". Valid types: completed, requested`,
+            message: 'repository_dispatch types must be strings',
             path: `${path}.${trigger.event}.types`,
             severity: 'error',
           })
         }
       }
+    } else {
+      // Validate against known valid types
+      for (const type of types) {
+        if (typeof type === 'string' && !validTypes.has(type)) {
+          const validTypesList = Array.from(validTypes).slice(0, 10).join(', ')
+          const more = validTypes.size > 10 ? ', ...' : ''
+          errors.push({
+            message: `Invalid ${trigger.event} type: "${type}". Valid types: ${validTypesList}${more}`,
+            path: `${path}.${trigger.event}.types`,
+            severity: trigger.event === 'workflow_run' ? 'error' : 'warning',
+          })
+        }
+      }
     }
+  }
+
+  // Validate workflow_run (requires workflows field)
+  if (trigger.event === 'workflow_run') {
     if (!config.workflows || (typeof config.workflows !== 'string' && !Array.isArray(config.workflows))) {
       errors.push({
         message: 'workflow_run trigger requires a "workflows" field (string or array of strings)',
