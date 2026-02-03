@@ -45,6 +45,22 @@ On every pull request to `main` or `master`, GitHub Actions runs:
 
 Workflow file: [.github/workflows/pull-request.yml](.github/workflows/pull-request.yml). Runs only when relevant files (e.g. `src/`, configs, `package.json`, lockfile) change.
 
+## Release
+
+Releases are automated with [Semantic Release](https://semantic-release.gitbook.io/). On every **push to `main` or `master`**:
+
+1. **Test** job runs: lint, unit tests (Vitest), and build.
+2. **Release** job runs only if tests pass: Semantic Release analyzes commits, bumps the version, updates `package.json` and `CHANGELOG.md`, pushes a release commit, and creates a GitHub release.
+
+Use [Conventional Commits](https://www.conventionalcommits.org/) so versions and changelog are derived from commit messages:
+
+- `feat: ...` → minor release (e.g. 1.1.0)
+- `fix: ...` → patch (e.g. 1.0.1)
+- `feat!: ...` or `fix!: ...` → major (e.g. 2.0.0)
+- `docs:`, `chore:`, etc. → no release (included in changelog when relevant)
+
+Workflow: [.github/workflows/release.yml](.github/workflows/release.yml). Config: [.releaserc.cjs](.releaserc.cjs). To run locally (dry run): `pnpm release --dry-run`.
+
 ## Keyboard shortcuts
 
 - **Ctrl/Cmd+O**: Open file
