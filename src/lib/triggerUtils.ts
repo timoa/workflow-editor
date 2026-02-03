@@ -53,7 +53,7 @@ export function triggerSupportsTypes(event: string): boolean {
 /**
  * Parse the workflow `on` field into an array of trigger configurations
  */
-export function parseTriggers(on: Workflow['on']): ParsedTrigger[] {
+export function parseTriggers(on: Workflow['on'] | undefined): ParsedTrigger[] {
   if (!on) return []
 
   // Simple string: "push"
