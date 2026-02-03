@@ -1,5 +1,26 @@
-import { useCallback } from 'react'
+import { useCallback, useState, useRef, useEffect } from 'react'
 import type { Workflow, WorkflowJob, WorkflowStep } from '@/types/workflow'
+import { SiUbuntu, SiApple } from 'react-icons/si'
+import { FaWindows } from 'react-icons/fa'
+import { HiServer } from 'react-icons/hi'
+
+// Icon components for different platforms
+// Ubuntu logo (circle of friends) – orange roundel, three white figures
+function getLinuxIcon() {
+  return <SiUbuntu className="text-[#E95420]" size={16} />
+}
+
+function getMacIcon() {
+  return <SiApple className="text-gray-700" size={16} />
+}
+
+function getWindowsIcon() {
+  return <FaWindows className="text-blue-500" size={16} />
+}
+
+function getServerIcon() {
+  return <HiServer className="text-slate-600" size={16} />
+}
 
 interface JobPropertyPanelProps {
   workflow: Workflow
@@ -68,6 +89,66 @@ export function JobPropertyPanel({
       : [job.needs]
     : []
 
+  const otherJobIds = Object.keys(workflow.jobs).filter((id) => id !== jobId)
+
+  // GitHub Actions runner options with icons
+  const runnerOptions = [
+    { value: 'ubuntu-latest', label: 'Ubuntu Latest', icon: getLinuxIcon() },
+    { value: 'ubuntu-22.04', label: 'Ubuntu 22.04', icon: getLinuxIcon() },
+    { value: 'ubuntu-20.04', label: 'Ubuntu 20.04', icon: getLinuxIcon() },
+    { value: 'macos-latest', label: 'macOS Latest', icon: getMacIcon() },
+    { value: 'macos-14', label: 'macOS 14', icon: getMacIcon() },
+    { value: 'macos-13', label: 'macOS 13', icon: getMacIcon() },
+    { value: 'macos-12', label: 'macOS 12', icon: getMacIcon() },
+    { value: 'windows-latest', label: 'Windows Latest', icon: getWindowsIcon() },
+    { value: 'windows-2022', label: 'Windows 2022', icon: getWindowsIcon() },
+    { value: 'windows-2019', label: 'Windows 2019', icon: getWindowsIcon() },
+    { value: 'self-hosted', label: 'Self-hosted', icon: getServerIcon() },
+  ]
+
+  const selectedOption = runnerOptions.find((opt) => opt.value === runsOn) || {
+    value: runsOn,
+    label: runsOn || 'ubuntu-latest',
+    icon: getLinuxIcon(),
+  }
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false)
+      }
+    }
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isDropdownOpen])
+
+  const handleRunsOnChange = useCallback(
+    (value: string) => {
+      setJobField('runs-on', value || 'ubuntu-latest')
+      setIsDropdownOpen(false)
+    },
+    [setJobField]
+  )
+
+  const toggleNeed = useCallback(
+    (needId: string, checked: boolean, e: React.ChangeEvent<HTMLInputElement>) => {
+      e.stopPropagation()
+      const current = needs as string[]
+      const next = checked
+        ? [...current, needId]
+        : current.filter((id) => id !== needId)
+      setJobField('needs', next.length === 0 ? undefined : next.length === 1 ? next[0] : next)
+    },
+    [needs, setJobField]
+  )
+
   return (
     <aside className="flex w-96 shrink-0 flex-col border-l border-slate-200 bg-white shadow-sm">
       <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2">
@@ -94,26 +175,68 @@ export function JobPropertyPanel({
         </div>
         <div>
           <label className="block text-xs font-medium text-slate-500">Runs on</label>
-          <input
-            type="text"
-            value={runsOn}
-            onChange={(e) => setJobField('runs-on', e.target.value.trim() || 'ubuntu-latest')}
-            className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-sm"
-            placeholder="ubuntu-latest"
-          />
+          <div ref={dropdownRef} className="relative mt-1">
+            <button
+              type="button"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full rounded border border-slate-300 bg-white px-2 py-1.5 text-sm text-left flex items-center gap-2 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <span className="flex-shrink-0">{selectedOption.icon}</span>
+              <span className="flex-1">{selectedOption.label}</span>
+              <span className={`text-slate-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
+            </button>
+            {isDropdownOpen && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-slate-300 rounded shadow-lg max-h-60 overflow-auto">
+                {runnerOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => handleRunsOnChange(option.value)}
+                    className={`w-full px-2 py-1.5 text-sm text-left flex items-center gap-2 hover:bg-slate-50 ${
+                      option.value === runsOn ? 'bg-blue-50 text-blue-700' : ''
+                    }`}
+                  >
+                    <span className="flex-shrink-0">{option.icon}</span>
+                    <span>{option.label}</span>
+                  </button>
+                ))}
+                {!runnerOptions.some((opt) => opt.value === runsOn) && (
+                  <button
+                    type="button"
+                    onClick={() => handleRunsOnChange(runsOn)}
+                    className="w-full px-2 py-1.5 text-sm text-left flex items-center gap-2 hover:bg-slate-50 bg-blue-50 text-blue-700"
+                  >
+                    <span className="flex-shrink-0">{selectedOption.icon}</span>
+                    <span>{runsOn || 'ubuntu-latest'}</span>
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
         <div>
-          <label className="block text-xs font-medium text-slate-500">Needs (job ids, comma-separated)</label>
-          <input
-            type="text"
-            value={needs.join(', ')}
-            onChange={(e) => {
-              const list = e.target.value.split(',').map((s) => s.trim()).filter(Boolean)
-              setJobField('needs', list.length === 0 ? undefined : list.length === 1 ? list[0] : list)
-            }}
-            className="mt-1 w-full rounded border border-slate-300 px-2 py-1.5 text-sm"
-            placeholder="build, test"
-          />
+          <label className="block text-xs font-medium text-slate-500">Needs</label>
+          {otherJobIds.length === 0 ? (
+            <p className="mt-1 text-xs text-slate-500">No other jobs in this workflow.</p>
+          ) : (
+            <ul className="mt-1 space-y-1.5 rounded border border-slate-300 bg-slate-50/50 p-2">
+              {otherJobIds.map((id) => (
+                <li key={id} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id={`needs-${id}`}
+                    checked={needs.includes(id)}
+                    onChange={(e) => toggleNeed(id, e.target.checked, e)}
+                    onClick={(e) => e.stopPropagation()}
+                    className="h-4 w-4 rounded border-slate-300 text-slate-600 focus:ring-slate-500"
+                  />
+                  <label htmlFor={`needs-${id}`} className="cursor-pointer text-sm text-slate-700">
+                    {id}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <div>

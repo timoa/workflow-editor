@@ -1,8 +1,12 @@
 import type { Node, Edge } from '@xyflow/react'
 import type { Workflow } from '@/types/workflow'
+import type { ParsedTrigger } from './triggerUtils'
+import { parseTriggers } from './triggerUtils'
 
 const NODE_WIDTH = 200
 const NODE_HEIGHT = 80
+const TRIGGER_NODE_WIDTH = 240
+const TRIGGER_NODE_HEIGHT = 100
 const HORIZONTAL_GAP = 80
 const VERTICAL_GAP = 60
 
@@ -13,21 +17,50 @@ export type JobNodeData = {
   stepCount: number
 }
 
+export type TriggerNodeData = {
+  triggers: ParsedTrigger[]
+}
+
 /**
  * Build React Flow nodes and edges from workflow model.
- * Layout: jobs flow left-to-right by dependency level (column 0 = no deps, column 1 = needs column 0, etc.);
+ * Layout: trigger node first, then jobs flow left-to-right by dependency level (column 0 = no deps, column 1 = needs column 0, etc.);
  * within each column nodes are stacked vertically.
  */
 export function workflowToFlowNodesEdges(workflow: Workflow): {
-  nodes: Node<JobNodeData>[]
+  nodes: Node<JobNodeData | TriggerNodeData>[]
   edges: Edge[]
 } {
   const jobIds = Object.keys(workflow.jobs)
-  if (jobIds.length === 0) {
-    return { nodes: [], edges: [] }
+  const triggers = parseTriggers(workflow.on)
+  
+  const nodes: Node<JobNodeData | TriggerNodeData>[] = []
+  const edges: Edge[] = []
+
+  // One trigger node per trigger (or a single empty node if no triggers)
+  if (triggers.length === 0) {
+    const triggerNode: Node<TriggerNodeData> = {
+      id: '__trigger__0',
+      type: 'trigger',
+      position: { x: 0, y: 0 },
+      data: { triggers: [] },
+    }
+    nodes.push(triggerNode)
+  } else {
+    triggers.forEach((trigger, index) => {
+      const triggerNode: Node<TriggerNodeData> = {
+        id: `__trigger__${index}`,
+        type: 'trigger',
+        position: { x: 0, y: index * (TRIGGER_NODE_HEIGHT + VERTICAL_GAP) },
+        data: { triggers: [trigger] },
+      }
+      nodes.push(triggerNode)
+    })
   }
 
-  const edges: Edge[] = []
+  if (jobIds.length === 0) {
+    return { nodes, edges }
+  }
+
   const needsMap = new Map<string, string[]>()
   for (const id of jobIds) {
     const job = workflow.jobs[id]
@@ -65,10 +98,28 @@ export function workflowToFlowNodesEdges(workflow: Workflow): {
     remaining = remaining.filter((id) => !placed.has(id))
   }
 
-  const nodes: Node<JobNodeData>[] = []
+  // Center trigger column vertically relative to first job column
+  const firstColumnHeight = columns[0]?.length ?? 0
+  const triggerCount = nodes.filter((n) => n.id.startsWith('__trigger__')).length
+  const triggerColumnHeight = triggerCount * (TRIGGER_NODE_HEIGHT + VERTICAL_GAP) - VERTICAL_GAP
+  const triggerY = firstColumnHeight > 0
+    ? Math.max(0, (firstColumnHeight - 1) * (NODE_HEIGHT + VERTICAL_GAP) / 2 - triggerColumnHeight / 2)
+    : 0
+  
+  nodes.forEach((node) => {
+    if (node.id.startsWith('__trigger__')) {
+      const idx = parseInt(node.id.replace('__trigger__', ''), 10)
+      if (!Number.isNaN(idx)) {
+        node.position.y = triggerY + idx * (TRIGGER_NODE_HEIGHT + VERTICAL_GAP)
+      }
+    }
+  })
+
+  // Position jobs starting after trigger node
+  const jobStartX = TRIGGER_NODE_WIDTH + HORIZONTAL_GAP
   for (let colIndex = 0; colIndex < columns.length; colIndex++) {
     const column = columns[colIndex]
-    const x = colIndex * (NODE_WIDTH + HORIZONTAL_GAP)
+    const x = jobStartX + colIndex * (NODE_WIDTH + HORIZONTAL_GAP)
     for (let rowIndex = 0; rowIndex < column.length; rowIndex++) {
       const jobId = column[rowIndex]
       const job = workflow.jobs[jobId]
@@ -88,6 +139,20 @@ export function workflowToFlowNodesEdges(workflow: Workflow): {
           stepCount,
         },
       })
+    }
+  }
+
+  // Add edges from each trigger node to all jobs in the first column
+  if (columns.length > 0) {
+    const triggerNodeIds = nodes.filter((n) => n.id.startsWith('__trigger__')).map((n) => n.id)
+    for (const triggerId of triggerNodeIds) {
+      for (const jobId of columns[0]) {
+        edges.push({
+          id: `${triggerId}-${jobId}`,
+          source: triggerId,
+          target: jobId,
+        })
+      }
     }
   }
 
