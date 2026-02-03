@@ -31,7 +31,19 @@ Then open http://localhost:5173.
 ```bash
 pnpm build
 pnpm test
+pnpm lint
 ```
+
+## CI (Pull request checks)
+
+On every pull request to `main` or `master`, GitHub Actions runs:
+
+- **Lint**: ESLint (TypeScript + React hooks and refresh)
+- **Test**: Vitest
+- **Build**: TypeScript (`tsc -b`) and Vite build
+- **Security**: `pnpm audit --audit-level=high` (fails on high or critical vulnerabilities)
+
+Workflow file: [.github/workflows/pull-request.yml](.github/workflows/pull-request.yml). Runs only when relevant files (e.g. `src/`, configs, `package.json`, lockfile) change.
 
 ## Keyboard shortcuts
 

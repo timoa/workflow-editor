@@ -179,10 +179,12 @@ export function workflowToFlowNodesEdges(workflow: Workflow): {
     const addJobX = lastColX + NODE_WIDTH + HORIZONTAL_GAP
     const lastColumnHeight = lastColumn.length
     const ADD_JOB_NODE_HEIGHT = 40 // h-10 = 40px
-    const addJobY =
+    // Align add-job node vertically with the job column (center of column = center of add button)
+    const columnCenterY =
       lastColumnHeight > 0
-        ? (lastColumnHeight - 1) * (NODE_HEIGHT + VERTICAL_GAP) / 2 - ADD_JOB_NODE_HEIGHT / 2
-        : 0
+        ? ((lastColumnHeight - 1) * (NODE_HEIGHT + VERTICAL_GAP)) / 2 + NODE_HEIGHT / 2
+        : NODE_HEIGHT / 2
+    const addJobY = columnCenterY - ADD_JOB_NODE_HEIGHT / 2
     const addJobNode: Node<AddJobNodeData> = {
       id: '__add_job__',
       type: 'addJob',
