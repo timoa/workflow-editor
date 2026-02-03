@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef, useEffect } from 'react'
+import { useCallback, useMemo, useState, useRef, useEffect } from 'react'
 import type { Workflow, WorkflowJob, WorkflowStep } from '@/types/workflow'
 import {
   COMMON_MATRIX_VARIABLES,
@@ -43,11 +43,11 @@ export function JobPropertyPanel({
   onDeleteJob,
 }: JobPropertyPanelProps) {
   const job = workflow.jobs[jobId]
-  if (!job) return null
 
   const updateJob = useCallback(
     (updater: (j: WorkflowJob) => WorkflowJob) => {
       const next = { ...workflow, jobs: { ...workflow.jobs } }
+      if (!next.jobs[jobId]) return
       next.jobs[jobId] = updater(next.jobs[jobId])
       onWorkflowChange(next)
     },
@@ -89,12 +89,20 @@ export function JobPropertyPanel({
     [updateJob]
   )
 
-  const runsOn = Array.isArray(job['runs-on']) ? job['runs-on'].join(', ') : String(job['runs-on'] ?? '')
-  const needs = job.needs
-    ? Array.isArray(job.needs)
-      ? job.needs
-      : [job.needs]
-    : []
+  const runsOn = job
+    ? Array.isArray(job['runs-on'])
+      ? job['runs-on'].join(', ')
+      : String(job['runs-on'] ?? '')
+    : ''
+  const needs = useMemo(
+    () =>
+      job?.needs
+        ? Array.isArray(job.needs)
+          ? job.needs
+          : [job.needs]
+        : [],
+    [job?.needs]
+  )
 
   const otherJobIds = Object.keys(workflow.jobs).filter((id) => id !== jobId)
 
@@ -165,6 +173,8 @@ export function JobPropertyPanel({
     },
     [needs, setJobField]
   )
+
+  if (!job) return null
 
   return (
     <aside className="flex w-96 shrink-0 flex-col border-l border-slate-200 bg-white shadow-sm">

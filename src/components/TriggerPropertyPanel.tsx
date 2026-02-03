@@ -108,7 +108,7 @@ export function TriggerPropertyPanel({
       const current = (trigger.config[key] as string[]) ?? []
       updateTriggerConfig(index, key, current.filter((_, i) => i !== itemIndex))
     },
-    [updateTriggerConfig]
+    [triggers, updateTriggerConfig]
   )
 
   return (

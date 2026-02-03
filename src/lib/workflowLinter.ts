@@ -277,7 +277,7 @@ function isValidCron(cron: string): boolean {
   const parts = cron.trim().split(/\s+/)
   if (parts.length !== 5) return false
   // Basic validation: each part should be a number, range, wildcard, or list
-  return parts.every((part) => /^[\d\*,\-\/]+$/.test(part))
+  return parts.every((part) => /^[\d*,/-]+$/.test(part))
 }
 
 /**
@@ -506,7 +506,7 @@ function validateJob(jobId: string, job: WorkflowJob, allJobIds: string[]): Lint
       }
       if (step.uses && typeof step.uses === 'string') {
         // Basic validation: uses should be in format owner/repo@ref or owner/repo/path@ref
-        if (!/^[\w\-\.]+\/[\w\-\.]+(@[\w\.\-]+)?(\/[\w\-\.\/]+)?(@[\w\.\-]+)?$/.test(step.uses)) {
+        if (!/^[\w.-]+\/[\w.-]+(@[\w.-]+)?(\/[\w.-/]+)?(@[\w.-]+)?$/.test(step.uses)) {
           errors.push({
             message: `Invalid action reference format: "${step.uses}". Expected format: "owner/repo@ref"`,
             path: `${stepPath}.uses`,

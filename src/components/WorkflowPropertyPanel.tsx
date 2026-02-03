@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import type { Workflow } from '@/types/workflow'
 
 interface WorkflowPropertyPanelProps {
@@ -26,7 +26,7 @@ export function WorkflowPropertyPanel({
     [updateWorkflow]
   )
 
-  const env = workflow.env ?? {}
+  const env = useMemo(() => workflow.env ?? {}, [workflow.env])
 
   const updateEnvVar = useCallback(
     (key: string, value: string) => {
