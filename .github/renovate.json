@@ -1,0 +1,20 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["npm"],
+      "minimumReleaseAge": "14 days"
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true
+  },
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "🔄 Dependency Dashboard",
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "schedule": ["before 6am on monday"]
+}

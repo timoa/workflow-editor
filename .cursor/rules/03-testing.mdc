@@ -1,0 +1,44 @@
+---
+description: Unit testing with Vitest and best practices
+globs: "**/*.test.{ts,tsx}"
+alwaysApply: false
+---
+
+# Testing
+
+## Runner and Config
+
+- **Vitest** only. Config in `vitest.config.ts`. Tests: `src/**/*.test.ts`, `src/**/*.test.tsx`.
+- Run: `pnpm test` (single run), `pnpm test:watch` (watch). Use `node` environment unless you need `jsdom` for components.
+
+## What to Test
+
+- **Workflow parsing/serialization**: All public functions in `lib/` (e.g. `parseWorkflow`, `serializeWorkflow`). Test valid YAML, invalid YAML, missing `jobs`, round-trips, and edge cases (needs, uses, with, env).
+- **Pure logic and types**: Any function that maps or validates workflow data.
+- **React components**: Use Vitest + React Testing Library when testing UI that depends on props or user interaction. Prefer testing behavior, not implementation details.
+
+## Structure
+
+- Colocate tests: `parseWorkflow.test.ts` next to `parseWorkflow.ts`, or in a `__tests__` folder under `src/lib` if preferred.
+- One describe per module or major function; nested describe for groups of cases.
+- Descriptive names: `it('parses minimal workflow', ...)`, `it('returns errors when jobs is missing', ...)`.
+
+## Assertions
+
+- Use `expect()` from Vitest. Prefer specific matchers: `toEqual`, `toContain`, `toHaveLength`, `toMatch`. For errors, assert on message content or length: `expect(errors.length).toBeGreaterThan(0)`.
+- For parse results, assert both `workflow` shape and `errors` when relevant.
+
+## Examples
+
+```typescript
+// Good: minimal workflow + round-trip
+it('round-trips minimal workflow', () => {
+  const { workflow } = parseWorkflow(minimalWorkflow)
+  const yaml = serializeWorkflow(workflow)
+  const { workflow: again, errors } = parseWorkflow(yaml)
+  expect(errors).toEqual([])
+  expect(again.name).toBe(workflow.name)
+})
+```
+
+- Avoid tests that only check “doesn’t throw”. Assert on return value or side effects.

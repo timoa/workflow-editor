@@ -1,0 +1,37 @@
+---
+description: Project overview, stack, and structure for GitHub Actions GUI
+alwaysApply: true
+---
+
+# GitHub Actions GUI – Project Overview
+
+## Purpose
+
+GUI for editing and visualizing **GitHub Actions workflows** (YAML). Users can view workflows as a flow graph (jobs and dependencies) and edit them via the UI. The app parses workflow YAML into a typed model and can serialize back to YAML.
+
+## Stack
+
+- **Package manager**: PNPM only. Use `pnpm install`, `pnpm add`, etc. No npm/yarn.
+- **Runtime**: Browser (Vite dev server; static build for deployment).
+- **Framework**: React 18 with TypeScript.
+- **Build**: Vite 6.
+- **Flow editor**: **React Flow** (`@xyflow/react` v12). Use for job graph (nodes = jobs, edges = `needs`).
+- **Styling**: Tailwind CSS. No CSS-in-JS; use utility classes and `tailwind.config.js`.
+- **Workflow format**: YAML. Use the `yaml` package for parse/stringify. Types live in `src/types/workflow.ts` (aligned with [GitHub workflow syntax](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)).
+- **Testing**: Vitest. Unit tests next to or under `src/**/*.test.ts` and `*.test.tsx`.
+- **Linting**: ESLint with TypeScript and React (hooks, refresh). Run with `pnpm lint`.
+
+## Directory Structure
+
+- `src/` – App source.
+  - `App.tsx`, `main.tsx` – Entry and root component.
+  - `lib/` – Core logic: `parseWorkflow`, `serializeWorkflow`, and tests.
+  - `types/` – Shared TypeScript types (e.g. `workflow.ts`).
+- `public/` – Static assets.
+- Config at root: `vite.config.ts`, `vitest.config.ts`, `tailwind.config.js`, `tsconfig.json`, `eslint.config.js`.
+
+## Conventions
+
+- Use path alias `@/` for `src/` (e.g. `import type { Workflow } from '@/types/workflow'`).
+- Workflow model: `Workflow` → `jobs` (record of `WorkflowJob`) → each job has `steps` (`WorkflowStep[]`). Parse returns `{ workflow, errors }`; always handle `errors`.
+- Keep UI and workflow logic separate: parsing/serialization in `lib/`, React Flow and UI in components.

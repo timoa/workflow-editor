@@ -1,0 +1,36 @@
+---
+description: TypeScript, React, and general coding standards
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Coding Standards
+
+## TypeScript
+
+- Strict typing; avoid `any`. Use `unknown` and type guards when types are dynamic.
+- Annotate exported functions and public APIs. Rely on inference for local variables when obvious.
+- Prefer interfaces in `src/types/` for shared domain types (e.g. `Workflow`, `WorkflowJob`, `WorkflowStep`).
+- Use `Record<string, unknown>` for generic YAML-like objects; narrow before use.
+
+## React
+
+- Functional components and hooks only. No class components.
+- Keep components focused: presentational components receive data via props; data fetching or workflow parsing stays in hooks or `lib/`.
+- Use named exports for components when re-exported; default export for page/root (e.g. `App.tsx`).
+- Prefer `React.FC` only when helpful; otherwise type props explicitly: `interface Props { ... }`.
+
+## Styling
+
+- Tailwind utility classes first. No inline styles unless dynamic (e.g. position from React Flow).
+- Use semantic class names and Tailwind’s responsive/modifier prefixes. Extend theme in `tailwind.config.js` if needed.
+
+## Formatting & Lint
+
+- ESLint and Prettier (if configured). Run `pnpm lint` before committing.
+- Fix lint errors; don’t disable rules without a short comment.
+
+## Imports
+
+- Prefer `@/` for app code: `import { parseWorkflow } from '@/lib/parseWorkflow'`.
+- Group: React/external libs first, then `@/` imports, then relative. Use type-only imports where appropriate: `import type { Workflow } from '@/types/workflow'`.

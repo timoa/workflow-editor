@@ -1,0 +1,28 @@
+---
+description: Workflow YAML domain, parsing, and types
+globs: "src/types/**/*.ts,src/lib/parse*.ts,src/lib/serialize*.ts"
+alwaysApply: false
+---
+
+# Workflow Domain
+
+## Types
+
+- **Workflow**: `name`, `run-name`, `on`, `env`, `jobs` (required). Optional fields via index signature. See `src/types/workflow.ts`.
+- **WorkflowJob**: `name`, `runs-on`, `needs`, `permissions`, `env`, `steps`, plus optional `container`, `services`, `if`.
+- **WorkflowStep**: `id`, `name`, `uses`, `run`, `with`, `env`, `shell`. Steps are ordered arrays.
+
+Reference: [GitHub Actions workflow syntax](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions).
+
+## Parsing
+
+- **parseWorkflow(yamlContent: string)**: Returns `{ workflow: Workflow, errors: string[] }`. Never throws; invalid YAML or structure is reported in `errors`. Missing `jobs` yields an error and empty `workflow.jobs`. Use `YAML.parse` (e.g. `yaml` package) with `strict: false` if needed for compatibility.
+- Normalize jobs and steps: ensure `runs-on`, `steps` array, and step shape (uses, with, env, etc.) so the rest of the app can assume typed structures.
+
+## Serialization
+
+- **serializeWorkflow(workflow: Workflow)**: Returns a YAML string. Output must be parseable and round-trip with parseWorkflow for supported fields. Preserve key order where it matters for readability (e.g. `name`, `on`, `jobs`).
+
+## Validation
+
+- Parsing collects structural errors (e.g. “jobs must be an object”). Semantic validation (e.g. valid `on` events, valid step `uses`) can be added later; keep validation results alongside or inside the same result object so the UI can show them.
