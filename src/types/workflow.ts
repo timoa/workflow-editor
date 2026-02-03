@@ -14,6 +14,12 @@ export interface WorkflowStep {
   [key: string]: unknown
 }
 
+export interface WorkflowJobStrategy {
+  matrix?: Record<string, string[] | number[]>
+  'fail-fast'?: boolean
+  'max-parallel'?: number
+}
+
 export interface WorkflowJob {
   name?: string
   'runs-on': string | string[]
@@ -21,6 +27,7 @@ export interface WorkflowJob {
   permissions?: Record<string, string>
   env?: Record<string, string>
   steps: WorkflowStep[]
+  strategy?: WorkflowJobStrategy
   container?: unknown
   services?: Record<string, unknown>
   if?: string

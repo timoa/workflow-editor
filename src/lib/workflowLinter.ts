@@ -265,6 +265,35 @@ function validateJob(jobId: string, job: WorkflowJob, allJobIds: string[]): Lint
     }
   }
 
+  // Validate strategy.matrix
+  if (job.strategy?.matrix) {
+    const matrix = job.strategy.matrix
+    if (Object.keys(matrix).length === 0) {
+      errors.push({
+        message: `Job "${jobId}" has an empty matrix. Remove strategy or add matrix variables.`,
+        path: `${path}.strategy.matrix`,
+        severity: 'warning',
+      })
+    } else {
+      for (const [key, values] of Object.entries(matrix)) {
+        if (!Array.isArray(values) || values.length === 0) {
+          errors.push({
+            message: `Matrix variable "${key}" in job "${jobId}" must be a non-empty array`,
+            path: `${path}.strategy.matrix.${key}`,
+            severity: 'error',
+          })
+        }
+      }
+    }
+    if (job.strategy['max-parallel'] !== undefined && job.strategy['max-parallel'] < 1) {
+      errors.push({
+        message: `max-parallel in job "${jobId}" must be at least 1`,
+        path: `${path}.strategy.max-parallel`,
+        severity: 'error',
+      })
+    }
+  }
+
   // Validate steps
   if (!job.steps || job.steps.length === 0) {
     errors.push({

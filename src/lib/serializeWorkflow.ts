@@ -17,11 +17,26 @@ export function serializeWorkflow(workflow: Workflow): string {
 
   const jobs: Record<string, unknown> = {}
   for (const [jobId, job] of Object.entries(workflow.jobs)) {
-    const { steps, ...rest } = job
+    const { steps, strategy, ...rest } = job
     const j: Record<string, unknown> = {
       ...rest,
       'runs-on': job['runs-on'],
       steps: steps.map((s) => stepToSerializable(s)),
+    }
+    if (strategy) {
+      const strategyObj: Record<string, unknown> = {}
+      if (strategy.matrix && Object.keys(strategy.matrix).length > 0) {
+        strategyObj.matrix = strategy.matrix
+      }
+      if (strategy['fail-fast'] !== undefined) {
+        strategyObj['fail-fast'] = strategy['fail-fast']
+      }
+      if (strategy['max-parallel'] !== undefined) {
+        strategyObj['max-parallel'] = strategy['max-parallel']
+      }
+      if (Object.keys(strategyObj).length > 0) {
+        j.strategy = strategyObj
+      }
     }
     jobs[jobId] = j
   }

@@ -56,6 +56,23 @@ export function parseWorkflow(yamlContent: string): ParseResult {
     }
     const j = jobVal as Record<string, unknown>
     const steps = Array.isArray(j.steps) ? j.steps : []
+    let strategy: import('@/types/workflow').WorkflowJobStrategy | undefined
+    if (j.strategy && typeof j.strategy === 'object' && j.strategy !== null && !Array.isArray(j.strategy)) {
+      const strat = j.strategy as Record<string, unknown>
+      const matrix =
+        typeof strat.matrix === 'object' && strat.matrix !== null && !Array.isArray(strat.matrix)
+          ? (strat.matrix as Record<string, string[] | number[]>)
+          : undefined
+      const failFast = typeof strat['fail-fast'] === 'boolean' ? strat['fail-fast'] : undefined
+      const maxParallel = typeof strat['max-parallel'] === 'number' ? strat['max-parallel'] : undefined
+      if (matrix || failFast !== undefined || maxParallel !== undefined) {
+        strategy = {
+          matrix,
+          'fail-fast': failFast,
+          'max-parallel': maxParallel,
+        }
+      }
+    }
     workflow.jobs[jobId] = {
       ...j,
       name: typeof j.name === 'string' ? j.name : undefined,
@@ -69,6 +86,7 @@ export function parseWorkflow(yamlContent: string): ParseResult {
       env: typeof j.env === 'object' && j.env !== null && !Array.isArray(j.env)
         ? (j.env as Record<string, string>)
         : undefined,
+      strategy,
       steps: steps.map((s, i) => normalizeStep(s, jobId, i)),
     }
   }

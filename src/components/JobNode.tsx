@@ -18,6 +18,11 @@ function JobNodeComponent(props: NodeProps) {
         <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600">
           {d.runsOn || 'ubuntu-latest'}
         </span>
+        {d.hasMatrix && d.matrixCombinations && (
+          <span className="rounded bg-purple-100 px-1.5 py-0.5 text-xs font-medium text-purple-700">
+            {d.matrixCombinations}× matrix
+          </span>
+        )}
         {d.stepCount > 0 && (
           <span className="text-xs text-slate-500">{d.stepCount} step{d.stepCount !== 1 ? 's' : ''}</span>
         )}

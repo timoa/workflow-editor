@@ -15,6 +15,8 @@ export type JobNodeData = {
   label: string
   runsOn: string
   stepCount: number
+  hasMatrix?: boolean
+  matrixCombinations?: number
 }
 
 export type TriggerNodeData = {
@@ -128,6 +130,14 @@ export function workflowToFlowNodesEdges(workflow: Workflow): {
         ? job['runs-on'].join(', ')
         : String(job['runs-on'] ?? '')
       const stepCount = job.steps?.length ?? 0
+      const hasMatrix = !!job.strategy?.matrix && Object.keys(job.strategy.matrix).length > 0
+      let matrixCombinations: number | undefined
+      if (hasMatrix && job.strategy?.matrix) {
+        matrixCombinations = Object.values(job.strategy.matrix).reduce(
+          (acc, values) => acc * (Array.isArray(values) ? values.length : 1),
+          1
+        )
+      }
       nodes.push({
         id: jobId,
         type: 'job',
@@ -137,6 +147,8 @@ export function workflowToFlowNodesEdges(workflow: Workflow): {
           label: job.name ?? jobId,
           runsOn,
           stepCount,
+          hasMatrix,
+          matrixCombinations,
         },
       })
     }
