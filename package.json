@@ -4,10 +4,11 @@
   "version": "1.1.1",
   "type": "module",
   "author": "Damien Laureaux",
+  "homepage": "https://workflow-editor.com",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/timoa/github-actions-gui.git"
+    "url": "https://github.com/timoa/workflow-editor.git"
   },
   "engines": {
     "node": ">=24"
