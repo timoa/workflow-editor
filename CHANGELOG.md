@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/timoa/github-actions-gui/compare/v1.0.2...v1.0.3) (2026-02-04)
+
+
+### Bug Fixes
+
+* **onboarding:** update the empty workflow behaviour ([3179345](https://github.com/timoa/github-actions-gui/commit/3179345bc1f6b489bbce77812d745ce3e69cba92))
+
 ## [1.0.2](https://github.com/timoa/github-actions-gui/compare/v1.0.1...v1.0.2) (2026-02-04)
 
 
