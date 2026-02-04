@@ -19,8 +19,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest",
-    "release": "semantic-release"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@xyflow/react": "^12.3.6",
@@ -31,10 +30,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^9.0.4",
-    "@semantic-release/npm": "^12.0.0",
     "@types/node": "^22.10.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
@@ -46,7 +41,6 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
     "postcss": "^8.4.49",
-    "semantic-release": "^24.0.0",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.0",
