@@ -15,7 +15,7 @@ function getEventIcon(event: string): React.ReactNode {
 /**
  * Returns one badge entry per filter (branches, tags, cron, types) so the diagram shows e.g. "master" and "v*" separately.
  */
-export function getTriggerBadges(trigger: ParsedTrigger): { icon: React.ReactNode; label: string }[] {
+function getTriggerBadges(trigger: ParsedTrigger): { icon: React.ReactNode; label: string }[] {
   const { event, config } = trigger
   const icon = getEventIcon(event)
   const badges: { icon: React.ReactNode; label: string }[] = []
