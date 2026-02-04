@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/timoa/github-actions-gui/compare/v1.1.0...v1.1.1) (2026-02-04)
+
+
+### Bug Fixes
+
+* **deps:** update types/node package to 24.0.0 ([c18f143](https://github.com/timoa/github-actions-gui/commit/c18f143ec01ce8fa3c01643c4ba4b344e64f5651))
+
 # [1.1.0](https://github.com/timoa/github-actions-gui/compare/v1.0.4...v1.1.0) (2026-02-04)
 
 
