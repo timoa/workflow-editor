@@ -10,7 +10,7 @@ createRoot(document.getElementById('root')!).render(
       attribute="class" 
       defaultTheme="system" 
       enableSystem
-      storageKey="github-actions-gui-theme"
+      storageKey="workflow-editor-theme"
       disableTransitionOnChange={false}
     >
       <App />

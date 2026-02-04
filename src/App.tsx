@@ -473,7 +473,7 @@ function AppInner() {
             <h1 className="text-lg font-semibold text-slate-400 dark:text-slate-500">No workflow loaded</h1>
           )}
         </div>
-        <div className="text-xs text-slate-400 dark:text-slate-500 font-medium">GitHub Actions GUI</div>
+        <div className="text-xs text-slate-400 dark:text-slate-500 font-medium">Workflow Editor</div>
         <div className="h-6 w-px bg-slate-200 dark:bg-slate-700" aria-hidden />
         <div className="flex items-center gap-2" role="group" aria-label="File">
           <button
