@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/timoa/workflow-editor/compare/v1.2.3...v1.2.4) (2026-02-06)
+
+
+### Bug Fixes
+
+* **extension:** remove folder that we need to keep in .vscodeignore ([443c335](https://github.com/timoa/workflow-editor/commit/443c33505064fa115634f5777534b376af37512b))
+
 ## [1.2.3](https://github.com/timoa/workflow-editor/compare/v1.2.2...v1.2.3) (2026-02-06)
 
 
