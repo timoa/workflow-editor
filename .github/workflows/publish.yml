@@ -2,7 +2,7 @@ name: Publish Extension
 
 on:
   release:
-    types: [created]
+    types: [published]
   workflow_dispatch:
     inputs:
       version:
