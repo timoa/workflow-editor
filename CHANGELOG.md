@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/timoa/workflow-editor/compare/v1.2.2...v1.2.3) (2026-02-06)
+
+
+### Bug Fixes
+
+* **deps:** fix the pnpm commands for publishing ([04a46f5](https://github.com/timoa/workflow-editor/commit/04a46f5ea97f436b92373ca3b89c8502a98ed1f0))
+
 ## [1.2.2](https://github.com/timoa/workflow-editor/compare/v1.2.1...v1.2.2) (2026-02-06)
 
 
