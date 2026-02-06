@@ -38,8 +38,8 @@ A VSCode extension providing a visual editor for GitHub Actions workflow files. 
 
 - **Command Palette**: Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac), type "Workflow Editor: Open", and press Enter
 - **Context Menu**: Right-click a `.yml` or `.yaml` file in the Explorer, select "Open with Workflow Editor"
-- **Command**: `workflow-editor.open` - Opens an empty editor
-- **Command**: `workflow-editor.openFile` - Opens file picker to load a workflow
+- **Command**: `workflow-visual-editor.open` - Opens an empty editor
+- **Command**: `workflow-visual-editor.openFile` - Opens file picker to load a workflow
 
 ### Keyboard Shortcuts
 

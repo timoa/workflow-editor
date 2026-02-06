@@ -3,12 +3,12 @@ import { WorkflowEditorProvider } from './webview';
 
 export function activate(context: vscode.ExtensionContext) {
   // Register command to open workflow editor
-  const openCommand = vscode.commands.registerCommand('workflow-editor.open', () => {
+  const openCommand = vscode.commands.registerCommand('workflow-visual-editor.open', () => {
     WorkflowEditorProvider.createOrShow(context.extensionUri);
   });
 
   // Register command to open file picker and load workflow
-  const openFileCommand = vscode.commands.registerCommand('workflow-editor.openFile', async () => {
+  const openFileCommand = vscode.commands.registerCommand('workflow-visual-editor.openFile', async () => {
     const fileUri = await vscode.window.showOpenDialog({
       canSelectFiles: true,
       canSelectFolders: false,
@@ -26,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Register context menu command for .yml/.yaml files
   const openWithEditorCommand = vscode.commands.registerCommand(
-    'workflow-editor.openWithEditor',
+    'workflow-visual-editor.openWithEditor',
     async (uri: vscode.Uri) => {
       // Create or show provider with file to load - will be loaded when webview is ready
       WorkflowEditorProvider.createOrShow(context.extensionUri, uri);

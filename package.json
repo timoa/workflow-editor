@@ -11,6 +11,19 @@
     "type": "git",
     "url": "https://github.com/timoa/workflow-editor.git"
   },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "github-actions",
+    "github-actions-workflow",
+    "workflow",
+    "yaml",
+    "devops",
+    "visual-editor",
+    "automation",
+    "github"
+  ],
   "engines": {
     "vscode": "^1.80.0",
     "node": ">=24"
@@ -19,17 +32,17 @@
   "contributes": {
     "commands": [
       {
-        "command": "workflow-editor.open",
+        "command": "workflow-visual-editor.open",
         "title": "Open Workflow Editor",
         "category": "Workflow Editor"
       },
       {
-        "command": "workflow-editor.openFile",
+        "command": "workflow-visual-editor.openFile",
         "title": "Open Workflow File",
         "category": "Workflow Editor"
       },
       {
-        "command": "workflow-editor.openWithEditor",
+        "command": "workflow-visual-editor.openWithEditor",
         "title": "Open with Workflow Editor",
         "category": "Workflow Editor"
       }
@@ -38,7 +51,7 @@
       "explorer/context": [
         {
           "when": "resourceExtname == .yml || resourceExtname == .yaml",
-          "command": "workflow-editor.openWithEditor",
+          "command": "workflow-visual-editor.openWithEditor",
           "group": "navigation"
         }
       ]
