@@ -1,6 +1,6 @@
 {
-  "name": "timoa-workflow-editor",
-  "displayName": "Workflow Editor",
+  "name": "workflow-visual-editor",
+  "displayName": "Workflow visual Editor",
   "description": "Visual editor for GitHub Actions workflow files",
   "version": "1.2.5",
   "publisher": "Timoa",
