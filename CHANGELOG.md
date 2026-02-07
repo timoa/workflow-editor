@@ -1,3 +1,10 @@
+## [1.2.11](https://github.com/timoa/workflow-editor/compare/v1.2.10...v1.2.11) (2026-02-07)
+
+
+### Bug Fixes
+
+* **extension:** add missing extension icon ([64634a9](https://github.com/timoa/workflow-editor/commit/64634a98c832c8ca60baa968139a21ea3e971a8c))
+
 ## [1.2.10](https://github.com/timoa/workflow-editor/compare/v1.2.9...v1.2.10) (2026-02-06)
 
 
