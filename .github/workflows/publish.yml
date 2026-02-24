@@ -1,21 +1,18 @@
 name: Publish Extension
 
 on:
-  # Trigger when called by the Release workflow after Semantic Release creates a new release
   workflow_call:
     inputs:
       ref:
         description: 'Git ref (branch, SHA or tag) to build from'
         required: false
         type: string
-  # Allow manual triggering
   workflow_dispatch:
     inputs:
       version:
         description: 'Version to publish (e.g., 1.0.0)'
         required: false
 
-# Declare default permissions as read only.
 permissions:
   contents: read
   actions: read
@@ -85,6 +82,7 @@ jobs:
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
+            ${{ runner.os }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -124,20 +122,19 @@ jobs:
         run: |
           echo "## Publish Status" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ "${{ steps.publish-vscode.outcome }}" == "success" ]; then
             echo "✅ VS Code Marketplace: Published successfully" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ VS Code Marketplace: Failed to publish" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [ "${{ steps.publish-ovsx.outcome }}" == "success" ]; then
             echo "✅ Open VSX Registry: Published successfully" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Open VSX Registry: Failed to publish" >> $GITHUB_STEP_SUMMARY
           fi
-          
-          # Fail the job if both marketplaces failed
+
           if [ "${{ steps.publish-vscode.outcome }}" != "success" ] && [ "${{ steps.publish-ovsx.outcome }}" != "success" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "⚠️ Both marketplaces failed to publish" >> $GITHUB_STEP_SUMMARY
