@@ -1,21 +1,18 @@
 name: Publish Extension
 
 on:
-  # Trigger when called by the Release workflow after Semantic Release creates a new release
   workflow_call:
     inputs:
       ref:
         description: 'Git ref (branch, SHA or tag) to build from'
         required: false
         type: string
-  # Allow manual triggering
   workflow_dispatch:
     inputs:
       version:
         description: 'Version to publish (e.g., 1.0.0)'
         required: false
 
-# Declare default permissions as read only.
 permissions:
   contents: read
   actions: read
@@ -32,11 +29,13 @@ permissions:
   statuses: read
 
 jobs:
-  publish:
-    name: Publish to Marketplaces
+  build:
+    name: Build Extension
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    outputs:
+      vsix-path: ${{ steps.upload-vsix.outputs.artifact-path }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
@@ -99,45 +98,95 @@ jobs:
         run: pnpm run package
 
       - name: Upload VSIX artifact
+        id: upload-vsix
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: extension-vsix
           path: '*.vsix'
           retention-days: 30
 
+  publish:
+    name: Publish to Marketplaces
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        marketplace: [vscode, ovsx]
+      fail-fast: false
+    steps:
+      - name: Download VSIX artifact
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v6.0.0
+        with:
+          name: extension-vsix
+
       - name: Publish to VS Code Marketplace
         id: publish-vscode
-        continue-on-error: true
+        if: matrix.marketplace == 'vscode'
         run: pnpm run publish
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
       - name: Publish to Open VSX Registry
         id: publish-ovsx
-        continue-on-error: true
+        if: matrix.marketplace == 'ovsx'
         run: npx ovsx publish *.vsix -p $OVSX_PAT
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
 
       - name: Report publish status
+        if: always()
         run: |
           echo "## Publish Status" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [ "${{ steps.publish-vscode.outcome }}" == "success" ]; then
-            echo "✅ VS Code Marketplace: Published successfully" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ VS Code Marketplace: Failed to publish" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ matrix.marketplace }}" == "vscode" ]; then
+            if [ "${{ steps.publish-vscode.outcome }}" == "success" ]; then
+              echo "✅ VS Code Marketplace: Published successfully" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ VS Code Marketplace: Failed to publish" >> $GITHUB_STEP_SUMMARY
+            fi
           fi
-          
-          if [ "${{ steps.publish-ovsx.outcome }}" == "success" ]; then
-            echo "✅ Open VSX Registry: Published successfully" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ Open VSX Registry: Failed to publish" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ matrix.marketplace }}" == "ovsx" ]; then
+            if [ "${{ steps.publish-ovsx.outcome }}" == "success" ]; then
+              echo "✅ Open VSX Registry: Published successfully" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ Open VSX Registry: Failed to publish" >> $GITHUB_STEP_SUMMARY
+            fi
           fi
-          
-          # Fail the job if both marketplaces failed
-          if [ "${{ steps.publish-vscode.outcome }}" != "success" ] && [ "${{ steps.publish-ovsx.outcome }}" != "success" ]; then
+
+  final-status:
+    name: Final Status Check
+    needs: publish
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check publish results
+        run: |
+          echo "## Final Publish Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          VS_CODE_STATUS="❌"
+          OVSX_STATUS="❌"
+
+          if [ "${{ needs.publish.result }}" == "success" ]; then
+            VS_CODE_STATUS="✅"
+            OVSX_STATUS="✅"
+          else
+            if [ "${{ contains(needs.publish.result, 'vscode') }}" == "false" ]; then
+              VS_CODE_STATUS="✅"
+            fi
+            if [ "${{ contains(needs.publish.result, 'ovsx') }}" == "false" ]; then
+              OVSX_STATUS="✅"
+            fi
+          fi
+
+          echo "$VS_CODE_STATUS VS Code Marketplace" >> $GITHUB_STEP_SUMMARY
+          echo "$OVSX_STATUS Open VSX Registry" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$VS_CODE_STATUS" == "❌" ] && [ "$OVSX_STATUS" == "❌" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "⚠️ Both marketplaces failed to publish" >> $GITHUB_STEP_SUMMARY
             exit 1
