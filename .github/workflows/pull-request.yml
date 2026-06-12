@@ -187,7 +187,7 @@ jobs:
           fetch-depth: 0
 
       - name: React Doctor
-        uses: millionco/react-doctor@66e1318b0ef133d8b7c1139397c7808b40c6cb15
+        uses: millionco/react-doctor@547e1e4ecdb70315d81a91ec3605701d58616ee2
         with:
-          diff: main
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          blocking: none
+          scope: full
