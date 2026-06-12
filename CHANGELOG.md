@@ -1,3 +1,11 @@
+## [1.2.45](https://github.com/timoa/workflow-editor/compare/v1.2.44...v1.2.45) (2026-06-12)
+
+
+### Bug Fixes
+
+* **cicd:** fix the React Doctor GitHub Actions ([064f9cc](https://github.com/timoa/workflow-editor/commit/064f9cc53b1a72134478e16a858d04abb9c0bbe3))
+* **deps:** address high/critical npm audit findings and migrate pnpm overrides ([cb239ef](https://github.com/timoa/workflow-editor/commit/cb239ef9a945c5fcc78755d8f6efc1bbc2af1da2)), closes [package.json#pnpm](https://github.com/package.json/issues/pnpm)
+
 ## [1.2.44](https://github.com/timoa/workflow-editor/compare/v1.2.43...v1.2.44) (2026-05-05)
 
 
