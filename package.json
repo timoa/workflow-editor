@@ -132,7 +132,7 @@
     "globals": "17.3.0",
     "mini-css-extract-plugin": "2.10.2",
     "mocha": "^11.7.5",
-    "postcss": "8.5.9",
+    "postcss": "8.5.15",
     "postcss-loader": "8.2.1",
     "tailwindcss": "4.2.0",
     "ts-loader": "9.5.7",
