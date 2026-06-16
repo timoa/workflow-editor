@@ -1,3 +1,12 @@
+## [1.2.46](https://github.com/timoa/workflow-editor/compare/v1.2.45...v1.2.46) (2026-06-16)
+
+
+### Bug Fixes
+
+* **deps:** apply 4 security advisories via pnpm overrides ([e9642b9](https://github.com/timoa/workflow-editor/commit/e9642b9edf0f227050c88155f2b2322fbb00fd91))
+* **deps:** resolve 4 moderate npm-audit GHSAs via pnpm overrides ([befe08b](https://github.com/timoa/workflow-editor/commit/befe08bb82e5dffddec114d860cbd5b4c4171007)), closes [#144](https://github.com/timoa/workflow-editor/issues/144)
+* **deps:** update dependency @actions/workflow-parser to v0.3.57 ([d43e3f5](https://github.com/timoa/workflow-editor/commit/d43e3f5a1d4194177086f76035802c86c3e994c3))
+
 ## [1.2.45](https://github.com/timoa/workflow-editor/compare/v1.2.44...v1.2.45) (2026-06-12)
 
 
