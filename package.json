@@ -125,7 +125,7 @@
     "@vscode/vsce": "3.7.1",
     "autoprefixer": "10.4.27",
     "css-loader": "7.1.4",
-    "eslint": "10.2.0",
+    "eslint": "10.4.1",
     "eslint-plugin-react-hooks": "7.0.1",
     "eslint-plugin-react-refresh": "0.5.2",
     "fast-check": "4.6.0",
