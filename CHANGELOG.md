@@ -1,3 +1,10 @@
+## [1.2.47](https://github.com/timoa/workflow-editor/compare/v1.2.46...v1.2.47) (2026-06-23)
+
+
+### Bug Fixes
+
+* **security:** bump pnpm override floor for undici + markdown-it ([e2c7ca9](https://github.com/timoa/workflow-editor/commit/e2c7ca957bd879ff87869050648718c4a3542619))
+
 ## [1.2.46](https://github.com/timoa/workflow-editor/compare/v1.2.45...v1.2.46) (2026-06-16)
 
 
