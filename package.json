@@ -98,7 +98,7 @@
     "test:e2e": "node ./out/test/e2e/runTest.js"
   },
   "dependencies": {
-    "@actions/workflow-parser": "0.3.57",
+    "@actions/workflow-parser": "0.3.60",
     "@codemirror/commands": "6.10.2",
     "@codemirror/language": "6.12.1",
     "@codemirror/legacy-modes": "6.5.2",
