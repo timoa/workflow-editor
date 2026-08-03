@@ -26,7 +26,7 @@ overrides:
   anymatch>picomatch: 2.3.2
   readdirp>picomatch: 2.3.2
   micromatch>picomatch: 4.0.5
-  tinyglobby>picomatch: 4.0.4
+  tinyglobby>picomatch: 4.0.5
   vite>picomatch: 4.0.5
   vitest>picomatch: 4.0.5
   mocha>diff: '>=8.0.3'
