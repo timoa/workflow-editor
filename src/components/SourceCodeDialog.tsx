@@ -31,8 +31,6 @@ export function SourceCodeDialog({
 }: SourceCodeDialogProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const viewRef = useRef<EditorView | null>(null)
-  const onDocChangeRef = useRef<(() => void) | null>(null)
-  onDocChangeRef.current = () => setSyntaxCheckValid(null)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [lintErrors, setLintErrors] = useState<LintError[]>([])
   const [syntaxCheckValid, setSyntaxCheckValid] = useState<boolean | null>(null)
@@ -70,7 +68,7 @@ export function SourceCodeDialog({
         keymap.of(defaultKeymap),
         theme,
         EditorView.updateListener.of((update) => {
-          if (update.docChanged) onDocChangeRef.current?.()
+          if (update.docChanged) setSyntaxCheckValid(null)
         }),
       ],
     })
