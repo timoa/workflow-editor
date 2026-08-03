@@ -23,7 +23,7 @@ overrides:
   micromatch>picomatch: 4.0.5
   tinyglobby>picomatch: 4.0.4
   vite>picomatch: 4.0.5
-  vitest>picomatch: 4.0.4
+  vitest>picomatch: 4.0.5
   mocha>diff: '>=8.0.3'
   '@textlint/linter-formatter>lodash': '>=4.18.0'
   undici: '>=8.5.0'
@@ -6579,7 +6579,7 @@ snapshots:
       magic-string: 0.30.21
       obug: 2.1.1
       pathe: 2.0.3
-      picomatch: 4.0.4
+      picomatch: 4.0.5
       std-env: 4.1.0
       tinybench: 2.9.0
       tinyexec: 1.0.2
