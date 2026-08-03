@@ -122,7 +122,7 @@
     "@vitejs/plugin-react": "5.1.4",
     "@vitest/coverage-v8": "^4.1.8",
     "@vscode/test-electron": "2.5.2",
-    "@vscode/vsce": "3.7.1",
+    "@vscode/vsce": "3.9.2",
     "autoprefixer": "10.4.27",
     "css-loader": "7.1.4",
     "eslint": "10.4.1",
