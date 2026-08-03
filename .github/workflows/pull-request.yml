@@ -201,7 +201,7 @@ jobs:
           fetch-depth: 0
 
       - name: React Doctor
-        uses: millionco/react-doctor@e9ccd4fa3d5e87d9aa1c144486f2d0670a863f72 # v2.2.8
+        uses: millionco/react-doctor@01820bb4fd4d0a4aebcd8df2b2a143a098649cb2 # v2.2.8
         with:
           blocking: none
           scope: changed
