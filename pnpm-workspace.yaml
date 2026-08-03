@@ -8,7 +8,7 @@ onlyBuiltDependencies:
 overrides:
   underscore: '>=1.13.8'
   markdown-it: '>=14.2.0'
-  linkify-it: '>=5.0.2'
+  linkify-it: '>=5.0.2 <6'
   test-exclude>minimatch: '>=10.2.1'
   qs: '>=6.15.2'
   rollup: '>=4.59.0'
