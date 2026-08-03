@@ -38,8 +38,8 @@ importers:
   .:
     dependencies:
       '@actions/workflow-parser':
-        specifier: 0.3.57
-        version: 0.3.57
+        specifier: 0.3.60
+        version: 0.3.60
       '@codemirror/commands':
         specifier: 6.10.2
         version: 6.10.2
@@ -167,12 +167,12 @@ importers:
 
 packages:
 
-  '@actions/expressions@0.3.57':
-    resolution: {integrity: sha512-9i38lcz1wsjLYagAMg0wFRf9859oBB2sLjmVjxXHNMzHoovDdxI4xeoWCRrsaUKgKFkffbdA3MiMAfvlXjX1ig==}
+  '@actions/expressions@0.3.60':
+    resolution: {integrity: sha512-9Go4zz77GbM6iUkullgo0tN7AHgUNRLkw66C6k3mHEc/QScweRNffjSluS0jcip+ULGkDYzBnyMvY9RjnFjEMA==}
     engines: {node: '>= 20'}
 
-  '@actions/workflow-parser@0.3.57':
-    resolution: {integrity: sha512-+PXG49BkEXpZfbqiWis9AjG94ygmqr7JD/0bByPG4ZCGLi2ZlYudfB/7iaCItV9yTqXMuC9tDg5AwM0I1n2Mqg==}
+  '@actions/workflow-parser@0.3.60':
+    resolution: {integrity: sha512-23dHOAA0BE4yA+0Lq9VuOdfjMnucVVYw/1fnbnEy3l814q7h4ET8+QE+zusOoLulln3/6UmeJUkmo1etOnlVBw==}
     engines: {node: '>= 20'}
 
   '@alloc/quick-lru@5.2.0':
@@ -3432,11 +3432,11 @@ packages:
 
 snapshots:
 
-  '@actions/expressions@0.3.57': {}
+  '@actions/expressions@0.3.60': {}
 
-  '@actions/workflow-parser@0.3.57':
+  '@actions/workflow-parser@0.3.60':
     dependencies:
-      '@actions/expressions': 0.3.57
+      '@actions/expressions': 0.3.60
       cronstrue: 2.59.0
       yaml: 2.8.3
 
