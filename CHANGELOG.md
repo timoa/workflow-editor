@@ -1,3 +1,14 @@
+## [1.2.48](https://github.com/timoa/workflow-editor/compare/v1.2.47...v1.2.48) (2026-08-03)
+
+
+### Bug Fixes
+
+* **deps:** fix critical and high vulnerabilities ([82de85f](https://github.com/timoa/workflow-editor/commit/82de85f714b4614601a677fd5c846aa5eee6d4a7))
+* **deps:** resolve remaining high severity advisories ([233fb05](https://github.com/timoa/workflow-editor/commit/233fb05055c492905c906aa128ccfce51ddd367a))
+* **deps:** update dependency @actions/workflow-parser to v0.3.60 ([c29bde2](https://github.com/timoa/workflow-editor/commit/c29bde2bb2c5be4f21c80d960ebcf663d0cfd93c))
+* **deps:** update react monorepo ([ebb835d](https://github.com/timoa/workflow-editor/commit/ebb835d1351346633f73c14d895e20218218289e))
+* **react-hooks:** remove ref-during-render lint errors in SourceCodeDialog ([6710e83](https://github.com/timoa/workflow-editor/commit/6710e83d03c9d0403a09a99ffc2fdfd0b98bc101))
+
 ## [1.2.47](https://github.com/timoa/workflow-editor/compare/v1.2.46...v1.2.47) (2026-06-23)
 
 
