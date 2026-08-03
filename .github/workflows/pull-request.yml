@@ -39,6 +39,7 @@ jobs:
             github.com:443
             ingest.codecov.io:443
             keybase.io:443
+            nodejs.org:443
             o26192.ingest.us.sentry.io:443
             registry.npmjs.org:443
             release-assets.githubusercontent.com:443
@@ -185,7 +186,15 @@ jobs:
       - name: Harden Runner
         uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
         with:
-          egress-policy: audit
+          egress-policy: block
+          allowed-endpoints: >
+            api.github.com:443
+            firewall-api.socket.dev:443
+            github.com:443
+            o4510226365743104.ingest.us.sentry.io:443
+            registry.npmjs.org:443
+            www.react.doctor:443
+
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
