@@ -27,7 +27,7 @@ overrides:
   readdirp>picomatch: 2.3.2
   micromatch>picomatch: 4.0.5
   tinyglobby>picomatch: 4.0.4
-  vite>picomatch: 4.0.4
+  vite>picomatch: 4.0.5
   vitest>picomatch: 4.0.4
   mocha>diff: '>=8.0.3'
   '@textlint/linter-formatter>lodash': '>=4.18.0'
