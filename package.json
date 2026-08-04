@@ -106,8 +106,8 @@
     "@codemirror/theme-one-dark": "6.1.3",
     "@codemirror/view": "6.39.15",
     "@xyflow/react": "12.10.1",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "react-icons": "5.5.0",
     "yaml": "2.8.3"
   },
