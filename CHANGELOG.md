@@ -1,3 +1,10 @@
+## [1.2.49](https://github.com/timoa/workflow-editor/compare/v1.2.48...v1.2.49) (2026-08-04)
+
+
+### Bug Fixes
+
+* **deps:** bump undici override to >=8.9.0 to close GHSA-4cwx-7wf7-3272 ([9588431](https://github.com/timoa/workflow-editor/commit/9588431a5a18f1fb7710b8d82d5476a9b39bbcb4))
+
 ## [1.2.48](https://github.com/timoa/workflow-editor/compare/v1.2.47...v1.2.48) (2026-08-03)
 
 
