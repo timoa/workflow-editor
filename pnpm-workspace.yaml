@@ -1,3 +1,8 @@
+allowBuilds:
+  '@vscode/vsce-sign': true
+  esbuild: true
+  keytar: false
+
 ignoredBuiltDependencies:
   - keytar
 
@@ -31,7 +36,10 @@ overrides:
   vitest>picomatch: 4.0.5
   mocha>diff: '>=8.0.3'
   '@textlint/linter-formatter>lodash': '>=4.18.0'
-  undici: '>=8.5.0'
+  # >=8.9.0 closes the GHSA-4cwx-7wf7-3272 (high) family of undici
+  # advisories pulled in transitively via @vscode/vsce>cheerio. >=8.5.0
+  # was insufficient — it accepted the vulnerable 8.5.0 itself.
+  undici: '>=8.9.0'
   fast-uri: '>=4.1.1'
   tmp: '>=0.2.6'
   esbuild: '>=0.28.1'
