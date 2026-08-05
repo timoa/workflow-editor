@@ -1,3 +1,10 @@
+## [1.2.51](https://github.com/timoa/workflow-editor/compare/v1.2.50...v1.2.51) (2026-08-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency yaml to v2.9.0 ([3c1e4c6](https://github.com/timoa/workflow-editor/commit/3c1e4c6ea175d34335020672c9e6b5477b327107))
+
 ## [1.2.50](https://github.com/timoa/workflow-editor/compare/v1.2.49...v1.2.50) (2026-08-05)
 
 
