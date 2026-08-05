@@ -46,3 +46,11 @@ overrides:
   form-data: '>=4.0.6'
   js-yaml: '>=4.3.0'
   '@babel/core': '>=7.29.6'
+  # Force a single version of each CodeMirror package across the workspace.
+  # `@codemirror/commands` and `@codemirror/legacy-modes` declare older
+  # ranges for these peer deps, which causes pnpm to keep duplicate copies
+  # and breaks TypeScript structural typing (TS2345: "Types have separate
+  # declarations of a private property ...").
+  '@codemirror/language': 6.12.4
+  '@codemirror/state': 6.7.1
+  '@codemirror/view': 6.43.6
