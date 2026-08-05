@@ -1,3 +1,10 @@
+## [1.2.50](https://github.com/timoa/workflow-editor/compare/v1.2.49...v1.2.50) (2026-08-05)
+
+
+### Bug Fixes
+
+* **deps:** update react monorepo to v19.2.8 ([7759f09](https://github.com/timoa/workflow-editor/commit/7759f09397dbc4f94fe7e5edb9263b130ce85fbe))
+
 ## [1.2.49](https://github.com/timoa/workflow-editor/compare/v1.2.48...v1.2.49) (2026-08-04)
 
 
