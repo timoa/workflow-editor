@@ -1,3 +1,11 @@
+## [1.2.53](https://github.com/timoa/workflow-editor/compare/v1.2.52...v1.2.53) (2026-08-05)
+
+
+### Bug Fixes
+
+* **deps:** pin CodeMirror package versions to fix TS2345 errors ([a637c4e](https://github.com/timoa/workflow-editor/commit/a637c4e8f4d2ae0590efbb0698291242054a8e58))
+* **deps:** update codemirror ([79213fe](https://github.com/timoa/workflow-editor/commit/79213fe9814cc32cf1e98cfa2865d7a0d3be9f85))
+
 ## [1.2.52](https://github.com/timoa/workflow-editor/compare/v1.2.51...v1.2.52) (2026-08-05)
 
 
