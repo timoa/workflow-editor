@@ -113,7 +113,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@tailwindcss/postcss": "4.2.0",
+    "@tailwindcss/postcss": "4.3.3",
     "@types/mocha": "10.0.10",
     "@types/node": "24.13.3",
     "@types/react": "19.2.17",
@@ -134,7 +134,7 @@
     "mocha": "^11.7.5",
     "postcss": "8.5.15",
     "postcss-loader": "8.2.1",
-    "tailwindcss": "4.2.0",
+    "tailwindcss": "4.3.3",
     "ts-loader": "9.6.2",
     "typescript": "5.9.3",
     "typescript-eslint": "8.65.0",
