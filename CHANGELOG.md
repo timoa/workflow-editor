@@ -1,3 +1,10 @@
+## [1.2.52](https://github.com/timoa/workflow-editor/compare/v1.2.51...v1.2.52) (2026-08-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @xyflow/react to v12.11.2 ([2ce0afa](https://github.com/timoa/workflow-editor/commit/2ce0afa326dd37bdae101e193619d6c184929f50))
+
 ## [1.2.51](https://github.com/timoa/workflow-editor/compare/v1.2.50...v1.2.51) (2026-08-05)
 
 
