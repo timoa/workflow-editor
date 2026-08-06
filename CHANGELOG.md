@@ -1,3 +1,10 @@
+## [1.2.54](https://github.com/timoa/workflow-editor/compare/v1.2.53...v1.2.54) (2026-08-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency react-icons to v5.7.0 ([107c45d](https://github.com/timoa/workflow-editor/commit/107c45d4bd74ce2f78741cf8ca7c0fd3eeb1ec93))
+
 ## [1.2.53](https://github.com/timoa/workflow-editor/compare/v1.2.52...v1.2.53) (2026-08-05)
 
 
