@@ -26,7 +26,7 @@ overrides:
   # `missingRefs` option that @eslint/eslintrc depends on, which crashes
   # ESLint. See the matching [[IgnoredVulns]] entry for GHSA-2g4f-4pwh-qvx6
   # in osv-scanner.toml for the full rationale.
-  eslint>ajv: 6.14.0
+  eslint>ajv: 6.15.0
   flatted: '>=3.4.2'
   anymatch>picomatch: 4.0.5
   readdirp>picomatch: 4.0.5
