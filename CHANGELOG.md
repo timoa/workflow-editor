@@ -1,3 +1,10 @@
+## [1.2.55](https://github.com/timoa/workflow-editor/compare/v1.2.54...v1.2.55) (2026-08-12)
+
+
+### Bug Fixes
+
+* **deps:** override nanoid to >=3.3.17 to address CVE-2026-67213 ([024196c](https://github.com/timoa/workflow-editor/commit/024196cff48270652a2da2c10fd39f6931228936))
+
 ## [1.2.54](https://github.com/timoa/workflow-editor/compare/v1.2.53...v1.2.54) (2026-08-06)
 
 
