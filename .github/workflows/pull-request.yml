@@ -15,6 +15,7 @@ jobs:
       pull-requests: read
     outputs:
       code: ${{ steps.filter.outputs.code }}
+      pnpm-or-nvm: ${{ steps.filter.outputs['pnpm-or-nvm'] }}
     steps:
       - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         id: filter
@@ -36,7 +37,7 @@ jobs:
   ci:
     name: Lint, Test, Build & Security
     needs: filter
-    if: needs.filter.outputs.code == 'true' || needs.filter.outputs.pnpm-or-nvm == 'true'
+    if: needs.filter.outputs.code == 'true' || needs.filter.outputs['pnpm-or-nvm'] == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
