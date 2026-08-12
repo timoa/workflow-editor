@@ -21,7 +21,11 @@ module.exports = {
       '@semantic-release/git',
       {
         assets: ['package.json', 'CHANGELOG.md'],
-        message: 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
+        // Intentional: no `[skip ci]` suffix. The release commit must
+        // trigger CodeQL so SAST scoring covers it (refs TIM-122 —
+        // SAST score 24/27). Release-only changes touch CHANGELOG.md
+        // and the package.json version bump, both cheap for CodeQL.
+        message: 'chore(release): ${nextRelease.version}\n\n${nextRelease.notes}',
       },
     ],
     [
