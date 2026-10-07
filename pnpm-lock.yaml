@@ -128,8 +128,8 @@ importers:
         specifier: 0.5.4
         version: 0.5.4(eslint@10.8.1(jiti@2.7.0)(supports-color@8.1.1))
       fast-check:
-        specifier: 4.9.0
-        version: 4.9.0
+        specifier: 4.10.2
+        version: 4.10.2
       globals:
         specifier: 17.7.0
         version: 17.7.0
@@ -1703,8 +1703,8 @@ packages:
     resolution: {integrity: sha512-KfYbmpRm0VbLjEvVa9yGwCi9GI34xvi7A/HXYWQO65CSD2u3MczUJSuwXKFIxlGsgBQizV9q5J9NHj4VG0n+pA==}
     engines: {node: '>=12.0.0'}
 
-  fast-check@4.9.0:
-    resolution: {integrity: sha512-7ms6T7SybUev/PQITciI0yLM2pOSFy5zpG8Ty7tQofcVaQUvrMXp6CBwqF6fThLCLOrfBtuHAtwq6Yu4XPCllg==}
+  fast-check@4.10.2:
+    resolution: {integrity: sha512-iK2f+YrcmoeGqk6fA0ea2bptcu/itMIm4NfEozq6N25+aG6h7s5HZbB/k1aV7b5w5sFLMCbbtRUsTVR+BgC3xw==}
     engines: {node: '>=12.17.0'}
 
   fast-deep-equal@3.1.3:
@@ -4561,7 +4561,7 @@ snapshots:
 
   expect-type@1.4.0: {}
 
-  fast-check@4.9.0:
+  fast-check@4.10.2:
     dependencies:
       pure-rand: 8.4.0
 
