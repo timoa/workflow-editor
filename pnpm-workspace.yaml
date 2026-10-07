@@ -30,7 +30,7 @@ overrides:
   eslint>ajv: 6.15.0
   flatted: '>=3.4.2'
   anymatch>picomatch: 4.0.7
-  readdirp>picomatch: 4.0.5
+  readdirp>picomatch: 4.0.7
   micromatch>picomatch: 4.0.5
   tinyglobby>picomatch: 4.0.5
   vite>picomatch: 4.0.7
