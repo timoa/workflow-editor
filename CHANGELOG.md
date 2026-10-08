@@ -1,3 +1,10 @@
+## [1.2.56](https://github.com/timoa/workflow-editor/compare/v1.2.55...v1.2.56) (2026-10-07)
+
+
+### Bug Fixes
+
+* **deps:** resolve high+moderate CVE advisories via bumps and overrides ([#232](https://github.com/timoa/workflow-editor/issues/232)) ([49cd68e](https://github.com/timoa/workflow-editor/commit/49cd68eb36ee370ee76554745afa3adb859248d3))
+
 ## [1.2.55](https://github.com/timoa/workflow-editor/compare/v1.2.54...v1.2.55) (2026-08-12)
 
 
