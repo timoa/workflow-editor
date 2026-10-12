@@ -129,7 +129,7 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.7",
     "fast-check": "4.10.2",
-    "globals": "17.7.0",
+    "globals": "17.12.0",
     "mini-css-extract-plugin": "2.10.2",
     "mocha": "^11.7.5",
     "postcss": "8.5.26",
