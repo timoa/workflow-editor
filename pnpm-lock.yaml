@@ -22,7 +22,7 @@ overrides:
   anymatch>picomatch: 4.0.7
   readdirp>picomatch: 4.0.7
   micromatch>picomatch: 4.0.7
-  tinyglobby>picomatch: 4.0.5
+  tinyglobby>picomatch: 4.0.7
   vite>picomatch: 4.0.7
   vitest>picomatch: 4.0.7
   mocha>diff: '>=8.0.3'
@@ -4668,10 +4668,6 @@ snapshots:
 
   fast-uri@4.2.1: {}
 
-  fdir@6.5.0(picomatch@4.0.5):
-    optionalDependencies:
-      picomatch: 4.0.5
-
   fdir@6.5.0(picomatch@4.0.7):
     optionalDependencies:
       picomatch: 4.0.7
@@ -5577,13 +5573,13 @@ snapshots:
 
   tinyglobby@0.2.15:
     dependencies:
-      fdir: 6.5.0(picomatch@4.0.5)
-      picomatch: 4.0.5
+      fdir: 6.5.0(picomatch@4.0.7)
+      picomatch: 4.0.7
 
   tinyglobby@0.2.17:
     dependencies:
-      fdir: 6.5.0(picomatch@4.0.5)
-      picomatch: 4.0.5
+      fdir: 6.5.0(picomatch@4.0.7)
+      picomatch: 4.0.7
 
   tinyrainbow@3.1.1: {}
 
