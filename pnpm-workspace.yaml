@@ -31,7 +31,7 @@ overrides:
   flatted: '>=3.4.2'
   anymatch>picomatch: 4.0.7
   readdirp>picomatch: 4.0.7
-  micromatch>picomatch: 4.0.5
+  micromatch>picomatch: 4.0.7
   tinyglobby>picomatch: 4.0.5
   vite>picomatch: 4.0.7
   vitest>picomatch: 4.0.7
