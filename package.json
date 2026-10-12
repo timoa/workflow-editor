@@ -123,7 +123,7 @@
     "@vitest/coverage-v8": "^4.1.11",
     "@vscode/test-electron": "3.1.0",
     "@vscode/vsce": "4.0.0",
-    "autoprefixer": "10.5.4",
+    "autoprefixer": "10.6.1",
     "css-loader": "7.1.4",
     "eslint": "10.11.0",
     "eslint-plugin-react-hooks": "7.1.1",
