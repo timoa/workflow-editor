@@ -1,3 +1,10 @@
+## [1.2.57](https://github.com/timoa/workflow-editor/compare/v1.2.56...v1.2.57) (2026-10-24)
+
+
+### Bug Fixes
+
+* **deps:** resolve 14 OSV advisories via bumps and overrides ([#252](https://github.com/timoa/workflow-editor/issues/252)) ([250db43](https://github.com/timoa/workflow-editor/commit/250db43a22e48b59dc3bb5ade4a1d1675975b71c))
+
 ## [1.2.56](https://github.com/timoa/workflow-editor/compare/v1.2.55...v1.2.56) (2026-10-07)
 
 
