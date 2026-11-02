@@ -14,11 +14,18 @@ overrides:
   underscore: '>=1.13.8'
   markdown-it: '>=14.2.0'
   linkify-it: '>=5.0.2 <7'
-  test-exclude>minimatch: '>=10.2.1'
-  qs: '>=6.15.2'
+  # >=6.16.1 fixes the qs.stringify arrayFormat:'comma' DoS (GHSA-6pq8-jhm2-2vcw).
+  qs: '>=6.16.1'
   rollup: '>=4.59.0'
-  '@typescript-eslint/typescript-estree>minimatch': '>=9.0.7'
-  minimatch>brace-expansion: '>=5.0.8'
+  # >=11.0.1 fixes the globparts amplification DoS (GHSA-g3hv-75wg-m249).
+  # minimatch 11 still ships a CommonJS export condition, so the CJS-only
+  # consumers (@vscode/vsce, eslint, mocha, test-exclude) keep working.
+  minimatch: '>=11.0.1'
+  minimatch>brace-expansion: '>=5.0.12'
+  # >=14.0.2 fixes the AbortSignal cancellation bypass in glob
+  # (GHSA-3g3m-2fjr-6pw4). mocha 11 pins glob ^10.4.5, so the major bump is
+  # forced here. glob 14 keeps the glob.sync/hasMagic surface mocha relies on.
+  mocha>glob: '>=14.0.2'
   postcss: '>=8.5.18'
   nanoid: '>=3.3.17'
   uuid: '>=11.1.1'
