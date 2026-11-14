@@ -68,11 +68,11 @@ function AppInner() {
     } else {
       root.classList.remove('dark')
     }
-    
+
     // Also use next-themes to persist
     setTheme(nextTheme)
   }
-  
+
   const displayTheme = resolvedTheme || theme || 'light'
   const [workflow, setWorkflow] = useState<Workflow | null>(null)
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null)
@@ -189,7 +189,7 @@ function AppInner() {
     }
     const triggerNode = selectedNodes.find((n) => n.type === 'trigger')
     const jobNode = selectedNodes.find((n) => n.type === 'job')
-    
+
     if (triggerNode) {
       setSelectedTrigger(true)
       setSelectedJobId(null)
@@ -357,8 +357,8 @@ function AppInner() {
   )
 
   const hasJobs = nodes.some((n) => n.type === 'job')
-  const hasTriggers = workflow && workflow.on && 
-    (typeof workflow.on === 'string' || 
+  const hasTriggers = workflow && workflow.on &&
+    (typeof workflow.on === 'string' ||
      (Array.isArray(workflow.on) && workflow.on.length > 0) ||
      (typeof workflow.on === 'object' && Object.keys(workflow.on).length > 0))
   const hasContent = hasJobs || hasTriggers
