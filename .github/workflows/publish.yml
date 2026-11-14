@@ -123,19 +123,19 @@ jobs:
         run: |
           echo "## Publish Status" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ "${{ steps.publish-vscode.outcome }}" == "success" ]; then
             echo "✅ VS Code Marketplace: Published successfully" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ VS Code Marketplace: Failed to publish" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [ "${{ steps.publish-ovsx.outcome }}" == "success" ]; then
             echo "✅ Open VSX Registry: Published successfully" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ Open VSX Registry: Failed to publish" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           # Fail the job if both marketplaces failed
           if [ "${{ steps.publish-vscode.outcome }}" != "success" ] && [ "${{ steps.publish-ovsx.outcome }}" != "success" ]; then
             echo "" >> $GITHUB_STEP_SUMMARY

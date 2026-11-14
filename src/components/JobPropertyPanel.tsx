@@ -1045,7 +1045,7 @@ export function JobPropertyPanel({
         </div>}
       </div>
       {onDeleteJob && (
-        <div 
+        <div
           className="flex justify-center border-t border-slate-200 dark:border-slate-700 p-4"
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
