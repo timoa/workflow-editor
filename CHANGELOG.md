@@ -1,3 +1,10 @@
+## [1.2.60](https://github.com/timoa/workflow-editor/compare/v1.2.59...v1.2.60) (2026-11-17)
+
+
+### Bug Fixes
+
+* **deps:** patch 3 moderate advisories (qs, glob, minimatch) + repair pre-commit eslint hook ([#268](https://github.com/timoa/workflow-editor/issues/268)) ([039d9a0](https://github.com/timoa/workflow-editor/commit/039d9a0a08c01a34731ee1e9c20e4c9165542540))
+
 ## [1.2.59](https://github.com/timoa/workflow-editor/compare/v1.2.58...v1.2.59) (2026-11-17)
 
 
