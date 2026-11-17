@@ -299,8 +299,8 @@ export class WorkflowEditorProvider {
 
   private _sendTheme() {
     const theme = vscode.window.activeColorTheme.kind;
-    const themeName = theme === vscode.ColorThemeKind.Dark ? 'dark' : 
-                     theme === vscode.ColorThemeKind.Light ? 'light' : 
+    const themeName = theme === vscode.ColorThemeKind.Dark ? 'dark' :
+                     theme === vscode.ColorThemeKind.Light ? 'light' :
                      'dark'; // Default to dark for high contrast
 
     this._panel.webview.postMessage({

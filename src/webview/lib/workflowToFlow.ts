@@ -39,7 +39,7 @@ export function workflowToFlowNodesEdges(workflow: Workflow): {
 } {
   const jobIds = Object.keys(workflow.jobs)
   const triggers = parseTriggers(workflow.on)
-  
+
   const nodes: Node<JobNodeData | TriggerNodeData | AddJobNodeData>[] = []
   const edges: Edge[] = []
 
@@ -112,7 +112,7 @@ export function workflowToFlowNodesEdges(workflow: Workflow): {
   const triggerY = firstColumnHeight > 0
     ? Math.max(0, (firstColumnHeight - 1) * (NODE_HEIGHT + VERTICAL_GAP) / 2 - triggerColumnHeight / 2)
     : 0
-  
+
   nodes.forEach((node) => {
     if (node.id.startsWith('__trigger__')) {
       const idx = parseInt(node.id.replace('__trigger__', ''), 10)

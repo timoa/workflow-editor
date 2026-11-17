@@ -4,7 +4,10 @@ repos:
   hooks:
   - id: gitleaks
 - repo: https://github.com/pre-commit/mirrors-eslint
-  rev: v8.38.0
+  # eslint 8 cannot read the project's flat config (eslint.config.mjs) and
+  # aborts with "ESLint couldn't find a configuration file". v10.12.0 matches
+  # the eslint version pinned in devDependencies.
+  rev: v10.12.0
   hooks:
   - id: eslint
 - repo: https://github.com/pre-commit/pre-commit-hooks

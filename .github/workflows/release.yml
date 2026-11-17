@@ -185,4 +185,3 @@ jobs:
       security-events: read
       statuses: read
     secrets: inherit
-

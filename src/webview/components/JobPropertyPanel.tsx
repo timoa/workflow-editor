@@ -1045,7 +1045,7 @@ className={`w-full px-1.5 py-1 text-xs text-left hover:bg-slate-50 dark:hover:bg
         </div>}
       </div>
       {onDeleteJob && (
-        <div 
+        <div
           className="flex justify-center border-t border-slate-200 dark:border-slate-700 p-4"
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
